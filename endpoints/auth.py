@@ -5,10 +5,14 @@ from decouple import config
 
 # from managers.auth import AuthManager
 from managers.user import UserManager
+from schemas.request.auth import LoginSchemaRequest, RegisterSchemaRequest
+from utils.decorators import validate_schema, validate_password, validate_phone_number
 
 
 class RegisterResource(Resource):
-    # @validate_schema(RegisterSchemaRequest)
+    @validate_schema(RegisterSchemaRequest)
+    @validate_phone_number(RegisterSchemaRequest)
+    @validate_password(RegisterSchemaRequest)
     def post(self):
         data = request.get_json()
         token = UserManager.register(data)
@@ -18,7 +22,7 @@ class RegisterResource(Resource):
 
 
 class LoginResource(Resource):
-    # @validate_schema(LoginSchemaRequest)
+    @validate_schema(LoginSchemaRequest)
     def post(self):
         data = request.get_json()
         token = UserManager.login(data)
