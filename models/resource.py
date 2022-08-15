@@ -13,7 +13,8 @@ class ResourceModel(db.Model):
     link = db.Column(db.String(300), nullable=False)
     notes = db.Column(db.Text, nullable=True)
     rating = db.Column(db.Numeric(1, 1), nullable=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    owner = db.relationship("UserModel")
     status = db.Column(
         db.Enum(ResourceStatus),
         default=ResourceStatus.pending,
