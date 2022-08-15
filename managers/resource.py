@@ -14,3 +14,7 @@ class ResourceManager:
         db.session.add(data)
         db.session.flush()
         return data
+
+    @staticmethod
+    def get_resources(owner):
+        return ResourceModel.query.filter_by(owner_id=owner.user_id).all()
