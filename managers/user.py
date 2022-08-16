@@ -13,6 +13,7 @@ class UserManager:
             user_data["password"] = generate_password_hash(user_data["password"], method='sha256')
             user = UserModel(**user_data)
             db.session.add(user)
+            db.session.commit()
             return AuthManager.encode_token(user)
         raise BadRequest("There is already an account with this e-mail. Please, log in or register with another e-mail \N{slightly smiling face}")
 
