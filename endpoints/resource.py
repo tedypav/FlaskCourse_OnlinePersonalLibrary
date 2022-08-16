@@ -41,20 +41,38 @@ class TagResourceResource(Resource):
         owner = auth.current_user()
         resource_id = int(data["resource_id"])
         resource = ResourceManager.get_single_resource(resource_id)
-
-        if not owner.user_id == int(FullResourceSchemaResponse().dump(resource)["owner_id"]):
-            raise Forbidden("You need to be the owner of this resource to tag it \N{unamused face}")
-
-
+        ResourceManager.authenticate_owner(resource_id, owner.user_id)
 
         for tag in data["tag"]:
             tag_info = TagManager.register(tag, owner)
             TagManager.assign_tag(resource_id, tag_info.tag_id)
-        #
-        #
 
-        # return {"message": "You successfully assigned tags to an existing resource! \N{slightly smiling face}"
-        #                    , "resource": FullResourceSchemaResponse().dump(resource)}, status.HTTP_201_CREATED
-        # return FullResourceSchemaResponse().dump(ResourceManager.get_resources(owner), many=True)
+        return {"messages": "You successfully tagged the resource \N{slightly smiling face}"
+                   , "resources": FullResourceSchemaResponse().dump(resource)}, status.HTTP_201_CREATED
 
-        return FullResourceSchemaResponse().dump(resource)
+
+class SetResourceReadResource(Resource):
+    @auth.login_required
+    def put(self, resource_id):
+        owner = auth.current_user()
+        ResourceManager.authenticate_owner(resource_id, owner.user_id)
+        ResourceManager.read(resource_id)
+        return {"message": "You successfully changed this resource\'s status to Read"}, status.HTTP_200_OK
+
+
+class SetResourceDroppedResource(Resource):
+    @auth.login_required
+    def put(self, resource_id):
+        owner = auth.current_user()
+        ResourceManager.authenticate_owner(resource_id, owner.user_id)
+        ResourceManager.dropped(resource_id)
+        return {"message": "You successfully changed this resource\'s status to Dropped"}, status.HTTP_200_OK
+
+
+class SetResourceToReadResource(Resource):
+    @auth.login_required
+    def put(self, resource_id):
+        owner = auth.current_user()
+        ResourceManager.authenticate_owner(resource_id, owner.user_id)
+        ResourceManager.to_read(resource_id)
+        return {"message": "You successfully changed this resource\'s status to To Read"}, status.HTTP_200_OK
