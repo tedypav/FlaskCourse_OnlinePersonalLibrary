@@ -1,3 +1,4 @@
+from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash
 from flask import request
 from flask_api import status
@@ -18,3 +19,14 @@ class ResourceManager:
     @staticmethod
     def get_resources(owner):
         return ResourceModel.query.filter_by(owner_id=owner.user_id).all()
+
+    @staticmethod
+    def get_single_resource(resource_id):
+        resource = ResourceModel.query.filter_by(resource_id=resource_id).first()
+
+        if resource is None:
+            raise BadRequest("Don't try to trick up, this resource doesn't exist! \N{winking face}")
+
+        return resource
+
+

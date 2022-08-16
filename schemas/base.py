@@ -13,4 +13,3 @@ class BaseResourceSchema(Schema):
 
 class BaseTagSchema(Schema):
     resource_id = fields.Int(required=True)
-    tag = fields.Str(required=True)
