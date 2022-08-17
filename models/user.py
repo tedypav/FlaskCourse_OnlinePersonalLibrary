@@ -1,7 +1,7 @@
 from sqlalchemy import func
 
 from db import db
-
+from models.enums import UserRole
 
 class UserModel(db.Model):
     __tablename__ = "user"
@@ -16,5 +16,6 @@ class UserModel(db.Model):
     password = db.Column(db.String(255), nullable=False)
     created_datetime = db.Column(db.DateTime, server_default=func.now())
     updated_datetime = db.Column(db.DateTime, server_default=func.now())
+    user_role = db.Column(db.Enum(UserRole), nullable=False)
     # tags = db.relationship("TagModel", backref="tag", lazy='dynamic')
     # resources = db.relationship("ResourceModel", backref="resource", lazy='dynamic')

@@ -1,12 +1,10 @@
 from flask import request
 from flask_api import status
 from flask_restful import Resource
-from werkzeug.exceptions import Forbidden
 
 from managers.auth import auth
 from managers.resource import ResourceManager
 from managers.tag import TagManager
-from schemas.base import BaseTagSchema
 from schemas.request.resource import ResourceSchemaRequest
 from schemas.request.tag import TagSchemaRequest
 from schemas.response.resource import ResourceSchemaResponse, FullResourceSchemaResponse
