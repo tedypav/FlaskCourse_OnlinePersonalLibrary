@@ -16,5 +16,6 @@ routes = (
     (ListTagsResource, "/my_tags/"),
     (DeleteTagNameResource, "/delete_tag/<string:tag>/"),
     (GetResourceByTagResource, "/my_resources_with_tag/<string:tag>/"),
+    (UpdateResourceResource, "/update_resource/"),
 
 )

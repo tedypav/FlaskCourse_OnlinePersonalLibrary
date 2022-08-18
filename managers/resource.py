@@ -1,3 +1,5 @@
+import json
+
 from werkzeug.exceptions import BadRequest, Forbidden
 from werkzeug.security import generate_password_hash
 from flask import request
@@ -63,4 +65,11 @@ class ResourceManager:
         assignments = ResourceManager.find_assignments(resource_id)
         assignments.delete(synchronize_session=False)
         db.session.delete(resource)
+        db.session.commit()
+
+    @staticmethod
+    def update_resource(resource_id, data):
+        for key, value in data.items():
+            resource = ResourceModel.query.filter_by(resource_id=resource_id).update({key: value})
+
         db.session.commit()

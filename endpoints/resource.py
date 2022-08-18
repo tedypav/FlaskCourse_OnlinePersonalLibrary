@@ -5,7 +5,7 @@ from flask_restful import Resource
 from managers.auth import auth
 from managers.resource import ResourceManager
 from managers.tag import TagManager
-from schemas.request.resource import ResourceSchemaRequest
+from schemas.request.resource import ResourceSchemaRequest, UpdateResourceSchemaRequest
 from schemas.request.tag import TagSchemaRequest
 from schemas.response.resource import ResourceSchemaResponse, FullResourceSchemaResponse
 from schemas.response.tag import TagSchemaResponse
@@ -19,8 +19,9 @@ class ResourceRegisterResource(Resource):
         data = request.get_json()
         owner = auth.current_user()
         new_resource = ResourceManager.register(data, owner)
-        return {"resource": ResourceSchemaResponse().dump(new_resource),
-                "message": "You successfully created a new resource! \N{slightly smiling face}"}, status.HTTP_201_CREATED
+        return {"message": "You successfully created a new resource! \N{slightly smiling face}"
+                   , "resource": ResourceSchemaResponse().dump(new_resource)}\
+            , status.HTTP_201_CREATED
 
 
 class ListResourceResource(Resource):
@@ -85,6 +86,7 @@ class DeleteResourceResource(Resource):
         ResourceManager.delete_resource(resource_id)
         return {"message": f"You successfully deleted resource with ID = {resource_id}."}, status.HTTP_200_OK
 
+
 class GetResourceByTagResource(Resource):
     @auth.login_required
     def get(self, tag):
@@ -101,3 +103,14 @@ class GetResourceByTagResource(Resource):
 
         return {"messages": f"Below are all resources you tagged as '{tag}'"
                 , "resources": assigned_resources}, status.HTTP_200_OK
+
+class UpdateResourceResource(Resource):
+    @auth.login_required
+    @validate_schema(UpdateResourceSchemaRequest)
+    def put(self):
+        owner = auth.current_user()
+        data = request.get_json()
+        resource_id = int(data["resource_id"])
+        ResourceManager.authenticate_owner(resource_id, owner.user_id)
+        ResourceManager.update_resource(resource_id, data)
+        return {"message": f"You successfully updated resource with ID = {resource_id}."}, status.HTTP_200_OK
