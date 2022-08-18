@@ -74,3 +74,12 @@ class SetResourceToReadResource(Resource):
         ResourceManager.authenticate_owner(resource_id, owner.user_id)
         ResourceManager.to_read(resource_id)
         return {"message": "You successfully changed this resource\'s status to To Read"}, status.HTTP_200_OK
+
+
+class DeleteResourceResource(Resource):
+    @auth.login_required
+    def delete(self, resource_id):
+        owner = auth.current_user()
+        ResourceManager.authenticate_owner(resource_id, owner.user_id)
+        ResourceManager.delete_resource(resource_id)
+        return {"message": f"You successfully deleted resource with ID = {resource_id}."}, status.HTTP_200_OK

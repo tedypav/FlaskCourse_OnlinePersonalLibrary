@@ -27,7 +27,7 @@ class ResourceManager:
         resource = ResourceModel.query.filter_by(resource_id=resource_id).first()
 
         if resource is None:
-            raise BadRequest("Don't try to trick up, this resource doesn't exist! \N{winking face}")
+            raise BadRequest("Don't try to trick us, this resource doesn't exist! \N{winking face}")
 
         return resource
 
@@ -35,7 +35,7 @@ class ResourceManager:
     def authenticate_owner(resource_id, user_id):
         resource = ResourceManager.get_single_resource(resource_id)
         if not user_id == int(FullResourceSchemaResponse().dump(resource)["owner_id"]):
-            raise Forbidden("You need to be the owner of this resource to tag it \N{unamused face}")
+            raise Forbidden("You need to be the owner of this resource to change or delete it \N{unamused face}")
         return True
 
     @staticmethod
@@ -51,3 +51,10 @@ class ResourceManager:
     @staticmethod
     def to_read(resource_id):
         ResourceModel.query.filter_by(resource_id=resource_id).update({"status": ResourceStatus.pending})
+
+
+    @staticmethod
+    def delete_resource(resource_id):
+        resource = ResourceManager.get_single_resource(resource_id)
+        db.session.delete(resource)
+        db.session.commit()
