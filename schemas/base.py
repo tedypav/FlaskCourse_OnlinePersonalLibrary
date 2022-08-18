@@ -12,4 +12,4 @@ class BaseResourceSchema(Schema):
 
 
 class BaseTagSchema(Schema):
-    resource_id = fields.Int(required=True)
+    tag_id = fields.Int(required=True)
