@@ -89,14 +89,15 @@ class GetResourceByTagResource(Resource):
     @auth.login_required
     def get(self, tag):
         owner = auth.current_user()
-        tag = TagManager.find_tag(tag, owner.user_id)
+        tag_info = TagManager.find_tag(tag, owner.user_id)
         assigned_resources = []
-        assignments = TagManager.find_assignments(TagSchemaResponse().dump(tag)["tag_id"])
+        assignments = TagManager.find_assignments(TagSchemaResponse().dump(tag_info)["tag_id"])
         if assignments is None:
-            return {"messages": f"You still haven't tagged anything as {tag} \N{slightly smiling face}"}
+            return {"messages": f"You still haven't tagged anything as '{tag}' \N{slightly smiling face}"}
         for assignment in assignments:
-            resource_id = assignment[0]
-            assigned_resources.append(ResourceManager.get_single_resource(resource_id))
+            resource_id = assignment[1]
+            resource_info = ResourceManager.get_single_resource(resource_id)
+            assigned_resources.append(ResourceSchemaResponse().dump(resource_info))
 
-        return {"messages": f"Below are all resources you tagged as {tag}"
+        return {"messages": f"Below are all resources you tagged as '{tag}'"
                 , "resources": assigned_resources}, status.HTTP_200_OK
