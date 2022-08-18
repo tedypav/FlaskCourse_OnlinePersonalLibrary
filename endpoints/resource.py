@@ -8,6 +8,7 @@ from managers.tag import TagManager
 from schemas.request.resource import ResourceSchemaRequest
 from schemas.request.tag import TagSchemaRequest
 from schemas.response.resource import ResourceSchemaResponse, FullResourceSchemaResponse
+from schemas.response.tag import TagSchemaResponse
 from utils.decorators import validate_schema
 
 
@@ -83,3 +84,19 @@ class DeleteResourceResource(Resource):
         ResourceManager.authenticate_owner(resource_id, owner.user_id)
         ResourceManager.delete_resource(resource_id)
         return {"message": f"You successfully deleted resource with ID = {resource_id}."}, status.HTTP_200_OK
+
+class GetResourceByTagResource(Resource):
+    @auth.login_required
+    def get(self, tag):
+        owner = auth.current_user()
+        tag = TagManager.find_tag(tag, owner.user_id)
+        assigned_resources = []
+        assignments = TagManager.find_assignments(TagSchemaResponse().dump(tag)["tag_id"])
+        if assignments is None:
+            return {"messages": f"You still haven't tagged anything as {tag} \N{slightly smiling face}"}
+        for assignment in assignments:
+            resource_id = assignment[0]
+            assigned_resources.append(ResourceManager.get_single_resource(resource_id))
+
+        return {"messages": f"Below are all resources you tagged as {tag}"
+                , "resources": assigned_resources}, status.HTTP_200_OK

@@ -60,15 +60,14 @@ class TagManager:
 
     @staticmethod
     def find_assignments(tag_id):
-        return db.session.query(resource_tag).filter_by(tag_id=tag_id).all()
+        return db.session.query(resource_tag).filter_by(tag_id=tag_id)
 
 
     @staticmethod
     def delete_tag(tag, user_id):
-        # tag_id = TagManager.find_tag_id(tag, user_id)
         tag = TagManager.find_tag(tag, user_id)
         tag_id = TagSchemaResponse().dump(tag)["tag_id"]
-        assignments = db.session.query(resource_tag).filter_by(tag_id=tag_id)
+        assignments = TagManager.find_assignments(tag_id = tag_id) #db.session.query(resource_tag).filter_by(tag_id=tag_id)
         assignments.delete(synchronize_session=False)
         db.session.delete(tag)
         db.session.commit()

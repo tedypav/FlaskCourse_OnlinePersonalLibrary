@@ -2,7 +2,7 @@ from marshmallow import Schema, fields, validate
 from marshmallow_enum import EnumField
 
 from models.enums import ResourceStatus
-from schemas.base import BaseResourceSchema, BaseTagSchema
+from schemas.base import BaseResourceSchema
 from schemas.response.tag import TagSchemaResponse
 
 

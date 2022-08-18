@@ -1,7 +1,6 @@
-from marshmallow import fields
-
-from schemas.base import BaseTagSchema
+from marshmallow import fields, Schema
 
 
-class TagSchemaRequest(BaseTagSchema):
+class TagSchemaRequest(Schema):
     tag = fields.List(fields.String(), required=True)
+    resource_id = fields.Int(required=True)

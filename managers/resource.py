@@ -4,7 +4,7 @@ from flask import request
 from flask_api import status
 from db import db
 from models import ResourceStatus
-from models.resource import ResourceModel
+from models.resource import ResourceModel, resource_tag
 from managers.auth import AuthManager
 from schemas.response.resource import FullResourceSchemaResponse
 
@@ -54,7 +54,13 @@ class ResourceManager:
 
 
     @staticmethod
+    def find_assignments(resource_id):
+        return db.session.query(resource_tag).filter_by(resource_id=resource_id)
+
+    @staticmethod
     def delete_resource(resource_id):
         resource = ResourceManager.get_single_resource(resource_id)
+        assignments = ResourceManager.find_assignments(resource_id)
+        assignments.delete(synchronize_session=False)
         db.session.delete(resource)
         db.session.commit()

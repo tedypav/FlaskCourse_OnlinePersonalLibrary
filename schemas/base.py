@@ -11,5 +11,4 @@ class BaseResourceSchema(Schema):
     author = fields.Str(required=True, validate=validate.Length(min=3, max=150))
 
 
-class BaseTagSchema(Schema):
-    tag_id = fields.Int(required=True)
+
