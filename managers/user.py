@@ -2,6 +2,7 @@ from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from db import db
+from models import UserRole
 from models.user import UserModel
 from managers.auth import AuthManager
 
@@ -11,6 +12,7 @@ class UserManager:
     def register(user_data):
         if UserModel.query.filter(UserModel.email == user_data["email"]).count() == 0:
             user_data["password"] = generate_password_hash(user_data["password"], method='sha256')
+            user_data["user_role"] = UserRole.user
             user = UserModel(**user_data)
             db.session.add(user)
             db.session.commit()
