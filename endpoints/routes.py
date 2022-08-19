@@ -2,7 +2,7 @@ from endpoints.auth import *
 from endpoints.resource import *
 from endpoints.tag import *
 from endpoints.statistics import *
-from endpoints.user import GetUserInfoResource
+from endpoints.user import GetUserInfoResource, UpdateUserResource
 
 routes = (
     (RegisterResource, "/register/"),
@@ -21,5 +21,6 @@ routes = (
     (UpdateResourceResource, "/update_resource/"),
     (GeneralStatsResource, "/general_stats/"),
     (GetUserInfoResource, "/my_user/"),
+    (UpdateUserResource, "/update_user/"),
 
 )

@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from sqlalchemy import func
 from werkzeug.exceptions import BadRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -33,4 +36,12 @@ class UserManager:
     def get_user_info(user_id):
         user = UserModel.query.filter_by(user_id=user_id).first()
         return user
+
+    @staticmethod
+    def update_user(user_id, data):
+        for key, value in data.items():
+            resource = UserModel.query.filter_by(user_id=user_id).update({key: value})
+
+        UserModel.query.filter_by(user_id=user_id).update({"updated_datetime": func.now()})
+        db.session.commit()
 

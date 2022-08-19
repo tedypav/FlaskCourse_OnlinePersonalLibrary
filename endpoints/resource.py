@@ -104,6 +104,7 @@ class GetResourceByTagResource(Resource):
         return {"messages": f"Below are all resources you tagged as '{tag}'"
                 , "resources": assigned_resources}, status.HTTP_200_OK
 
+
 class UpdateResourceResource(Resource):
     @auth.login_required
     @validate_schema(UpdateResourceSchemaRequest)
