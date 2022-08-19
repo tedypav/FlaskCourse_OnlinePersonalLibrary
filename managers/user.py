@@ -28,3 +28,9 @@ class UserManager:
         if check_password_hash(user.password, login_data["password"]):
             return AuthManager.encode_token(user)
         raise BadRequest("The provided password is incorrect. Please, try again \N{pensive face}")
+
+    @staticmethod
+    def get_user_info(user_id):
+        user = UserModel.query.filter_by(user_id=user_id).first()
+        return user
+
