@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, validate
+from marshmallow import fields, validate
 from marshmallow_enum import EnumField
 
 from models.enums import ResourceStatus

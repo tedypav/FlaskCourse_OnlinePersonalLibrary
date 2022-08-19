@@ -13,10 +13,12 @@ migrate = Migrate(app, db)
 
 [api.add_resource(*route_data) for route_data in routes]
 
+
 @app.after_request
 def return_resp(resp):
     db.session.commit()
     return resp
+
 
 if __name__ == "__main__":
     app.run()
