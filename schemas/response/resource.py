@@ -3,7 +3,7 @@ from marshmallow_enum import EnumField
 
 from models.enums import ResourceStatus
 from schemas.base import BaseResourceSchema
-from schemas.response.tag import TagSchemaResponse
+from schemas.response.tag import TagShortSchemaResponse
 
 
 class ResourceSchemaResponse(BaseResourceSchema):
@@ -21,4 +21,4 @@ class FullResourceSchemaResponse(BaseResourceSchema):
     created_datetime = fields.DateTime(required=True)
     updated_datetime = fields.DateTime(required=True)
     owner_id = fields.Int(required=True)
-    tags = fields.Nested(TagSchemaResponse, many=True)
+    tags = fields.Nested(TagShortSchemaResponse, many=True)

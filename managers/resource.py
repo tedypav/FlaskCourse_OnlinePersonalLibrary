@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from werkzeug.exceptions import BadRequest, Forbidden
 from werkzeug.security import generate_password_hash
@@ -43,16 +44,19 @@ class ResourceManager:
     @staticmethod
     def read(resource_id):
         ResourceModel.query.filter_by(resource_id=resource_id).update({"status": ResourceStatus.read})
+        ResourceModel.query.filter_by(resource_id=resource_id).update({"updated_datetime": datetime.utcnow()})
 
 
     @staticmethod
     def dropped(resource_id):
         ResourceModel.query.filter_by(resource_id=resource_id).update({"status": ResourceStatus.dropped})
+        ResourceModel.query.filter_by(resource_id=resource_id).update({"updated_datetime": datetime.utcnow()})
 
 
     @staticmethod
     def to_read(resource_id):
         ResourceModel.query.filter_by(resource_id=resource_id).update({"status": ResourceStatus.pending})
+        ResourceModel.query.filter_by(resource_id=resource_id).update({"updated_datetime": datetime.utcnow()})
 
 
     @staticmethod
@@ -72,4 +76,5 @@ class ResourceManager:
         for key, value in data.items():
             resource = ResourceModel.query.filter_by(resource_id=resource_id).update({key: value})
 
+        ResourceModel.query.filter_by(resource_id=resource_id).update({"updated_datetime": datetime.utcnow()})
         db.session.commit()
