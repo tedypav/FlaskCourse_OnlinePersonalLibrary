@@ -1,6 +1,7 @@
 from endpoints.auth import *
 from endpoints.resource import *
 from endpoints.tag import *
+from endpoints.statistics import *
 
 routes = (
     (RegisterResource, "/register/"),
@@ -17,5 +18,6 @@ routes = (
     (DeleteTagNameResource, "/delete_tag/<string:tag>/"),
     (GetResourceByTagResource, "/my_resources_with_tag/<string:tag>/"),
     (UpdateResourceResource, "/update_resource/"),
+    (GeneralStatsResource, "/general_stats/"),
 
 )
