@@ -3,6 +3,7 @@ from sqlalchemy import func
 from db import db
 from models.enums import UserRole
 
+
 class UserModel(db.Model):
     __tablename__ = "user"
 

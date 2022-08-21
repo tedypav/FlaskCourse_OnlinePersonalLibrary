@@ -9,6 +9,3 @@ class AuthBase(Schema):
 class BaseResourceSchema(Schema):
     title = fields.Str(required=True, validate=validate.Length(min=3, max=150))
     author = fields.Str(required=True, validate=validate.Length(min=3, max=150))
-
-
-

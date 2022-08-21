@@ -1,6 +1,8 @@
 from endpoints.auth import *
 from endpoints.resource import *
+from endpoints.statistics import *
 from endpoints.tag import *
+from endpoints.user import GetUserInfoResource, UpdateUserResource
 
 routes = (
     (RegisterResource, "/register/"),
@@ -17,5 +19,9 @@ routes = (
     (DeleteTagNameResource, "/delete_tag/<string:tag>/"),
     (GetResourceByTagResource, "/my_resources_with_tag/<string:tag>/"),
     (UpdateResourceResource, "/update_resource/"),
-
+    (GeneralStatsResource, "/general_stats/"),
+    (GetUserInfoResource, "/my_user/"),
+    (UpdateUserResource, "/update_user/"),
+    (UploadFileResource, "/upload_file/<int:resource_id>/"),
+    (DeleteFileResource, "/delete_file/<int:resource_id>/"),
 )

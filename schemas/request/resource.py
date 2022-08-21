@@ -1,4 +1,5 @@
 from marshmallow import fields, validate, Schema
+
 from schemas.base import BaseResourceSchema
 
 
@@ -15,3 +16,7 @@ class UpdateResourceSchemaRequest(Schema):
     link = fields.Str(required=False)
     notes = fields.Str(required=False)
     rating = fields.Float(required=False, validate=validate.Range(min=0, max=5))
+
+
+class UploadFileResourceSchemaRequest(Schema):
+    file = fields.Raw(required=True, type="file")

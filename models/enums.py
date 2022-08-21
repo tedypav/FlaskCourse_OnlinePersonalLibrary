@@ -6,6 +6,7 @@ class ResourceStatus(Enum):
     pending = "To Read"
     dropped = "Dropped"
 
+
 class UserRole(Enum):
     user = "user"
     admin = "admin"
