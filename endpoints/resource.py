@@ -5,7 +5,7 @@ from flask_restful import Resource
 from managers.auth import auth
 from managers.resource import ResourceManager
 from managers.tag import TagManager
-from schemas.request.resource import ResourceSchemaRequest, UpdateResourceSchemaRequest
+from schemas.request.resource import ResourceSchemaRequest, UpdateResourceSchemaRequest, UploadFileResourceSchemaRequest
 from schemas.request.tag import TagSchemaRequest
 from schemas.response.resource import ResourceSchemaResponse, FullResourceSchemaResponse
 from schemas.response.tag import TagSchemaResponse
@@ -140,6 +140,7 @@ class UpdateResourceResource(Resource):
 
 class UploadFileResource(Resource):
     @auth.login_required
+    @validate_schema(UploadFileResourceSchemaRequest)
     def post(self, resource_id):
         owner = auth.current_user()
         file = request.files["file"]

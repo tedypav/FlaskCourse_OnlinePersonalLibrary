@@ -1,24 +1,20 @@
-from flask import Flask
-from flask_migrate import Migrate
-from flask_restful import Api
-
+from config import create_app
 from db import db
-from endpoints.routes import routes
 
-app = Flask(__name__)
-db.init_app(app)
-app.config.from_object(f"config.EnvironmentConfig")
-api = Api(app)
-migrate = Migrate(app, db)
+app = create_app()
 
-[api.add_resource(*route_data) for route_data in routes]
+
+@app.before_first_request
+def create_tables():
+    db.init_app(app)
+    db.create_all()
 
 
 @app.after_request
-def return_resp(resp):
+def close_request(response):
     db.session.commit()
-    return resp
+    return response
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run()

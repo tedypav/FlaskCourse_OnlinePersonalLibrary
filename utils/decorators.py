@@ -1,5 +1,3 @@
-import phonenumbers
-from decouple import config
 from flask import request
 from werkzeug.exceptions import BadRequest, Forbidden
 
