@@ -5,13 +5,11 @@ from flask_restful import Resource
 
 from managers.user import UserManager
 from schemas.request.auth import LoginSchemaRequest, RegisterSchemaRequest
-from utils.decorators import validate_schema, validate_password, validate_phone_number
+from utils.decorators import validate_schema
 
 
 class RegisterResource(Resource):
     @validate_schema(RegisterSchemaRequest)
-    @validate_phone_number(RegisterSchemaRequest)
-    @validate_password(RegisterSchemaRequest)
     def post(self):
         data = request.get_json()
         token = UserManager.register(data)

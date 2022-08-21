@@ -6,7 +6,7 @@ from managers.auth import auth
 from managers.user import UserManager
 from schemas.request.user import UpdateUserSchemaRequest
 from schemas.response.user import UserSchemaResponse
-from utils.decorators import validate_schema, validate_phone_number
+from utils.decorators import validate_schema
 
 
 class GetUserInfoResource(Resource):
@@ -23,7 +23,6 @@ class GetUserInfoResource(Resource):
 class UpdateUserResource(Resource):
     @auth.login_required
     @validate_schema(UpdateUserSchemaRequest)
-    @validate_phone_number(UpdateUserSchemaRequest)
     def put(self):
         owner = auth.current_user()
         data = request.get_json()

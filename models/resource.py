@@ -21,7 +21,7 @@ class ResourceModel(db.Model):
     resource_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
     author = db.Column(db.String(150), nullable=False)
-    link = db.Column(db.String(300), nullable=False)
+    link = db.Column(db.String(300), nullable=True)
     notes = db.Column(db.Text, nullable=True)
     rating = db.Column(db.Numeric(2, 1), nullable=True)
     owner_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
@@ -32,3 +32,4 @@ class ResourceModel(db.Model):
     created_datetime = db.Column(db.DateTime, server_default=func.now())
     updated_datetime = db.Column(db.DateTime, server_default=func.now())
     tags = db.relationship("TagModel", secondary=resource_tag)
+    file_url = db.Column(db.String(300), nullable=True)
