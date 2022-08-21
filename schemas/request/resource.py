@@ -16,5 +16,7 @@ class UpdateResourceSchemaRequest(Schema):
     link = fields.Str(required=False)
     notes = fields.Str(required=False)
     rating = fields.Float(required=False, validate=validate.Range(min=0, max=5))
-    file = fields.Str(required=False)
-    file_extension = fields.Str(required=False)
+
+
+class UploadFileResourceSchemaRequest(Schema):
+    file = fields.Raw(required=True, type='file')

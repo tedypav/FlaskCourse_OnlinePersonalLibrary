@@ -136,3 +136,18 @@ class UpdateResourceResource(Resource):
         return {
             "message": f"You successfully updated resource with ID = {resource_id}."
         }, status.HTTP_200_OK
+
+
+class UploadFileResource(Resource):
+    @auth.login_required
+    def post(self, resource_id):
+        owner = auth.current_user()
+        file = request.files['file']
+        ResourceManager.authenticate_owner(resource_id, owner.user_id)
+        ResourceManager.to_read(resource_id)
+        url = ResourceManager.upload_file(resource_id, file)
+        data = {"file_url": url}
+        ResourceManager.update_resource(resource_id, data)
+        return {
+            "message": "You successfully changed this resource's status to To Read"
+        }, status.HTTP_200_OK

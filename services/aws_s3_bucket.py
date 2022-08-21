@@ -17,8 +17,8 @@ class S3Service:
             self.s3.upload_file(path, self.bucket, key)
             return f"https://{self.bucket}.s3.{self.region}.amazonaws.com/{key}"
         except ClientError as ex:
-            raise InternalServerError("Sorry, the S3 bucket service is not available at the moment, please try a bit later ")
+            raise InternalServerError("Sorry, the S3 bucket service is not available at the moment, please try a bit later \N{unamused face}")
 
-    def delete_photo(self, key):
+    def delete_file(self, key):
         # TODO implement
         pass

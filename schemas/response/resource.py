@@ -10,7 +10,6 @@ class ResourceSchemaResponse(BaseResourceSchema):
     resource_id = fields.Int(required=True)
     created_datetime = fields.DateTime(required=True)
     status = EnumField(ResourceStatus, by_value=True)
-    file_url = fields.Str(required=True)
 
 
 class FullResourceSchemaResponse(BaseResourceSchema):
@@ -23,3 +22,4 @@ class FullResourceSchemaResponse(BaseResourceSchema):
     updated_datetime = fields.DateTime(required=True)
     owner_id = fields.Int(required=True)
     tags = fields.Nested(TagShortSchemaResponse, many=True)
+    file_url = fields.Str(required=True)

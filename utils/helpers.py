@@ -1,11 +1,12 @@
-import base64
+import os
 
 from werkzeug.exceptions import BadRequest
 
+from constants import TEMP_FILE_FOLDER
 
-def decode_file(path, encoded_string):
-    with open(path, "wb") as f:
-        try:
-            f.write(base64.b64decode(encoded_string.encode("utf-8")))
-        except Exception as ex:
-            raise BadRequest("There is some problem with your file encoding. Please, make sure you ran it through a base64 encoder \N{slightly smiling face}")
+
+def delete_local_file(name):
+    try:
+        os.remove(os.path.join(TEMP_FILE_FOLDER, name))
+    except Exception as ex:
+        raise ex
