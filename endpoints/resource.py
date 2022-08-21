@@ -142,12 +142,36 @@ class UploadFileResource(Resource):
     @auth.login_required
     def post(self, resource_id):
         owner = auth.current_user()
-        file = request.files['file']
+        file = request.files["file"]
         ResourceManager.authenticate_owner(resource_id, owner.user_id)
-        ResourceManager.to_read(resource_id)
+        resource = ResourceManager.get_single_resource(resource_id)
+        current_url = FullResourceSchemaResponse().dump(resource)["file_url"]
+        if not current_url == "":
+            file_name = current_url.split("/")[-1]
+            ResourceManager.delete_file(file_name)
         url = ResourceManager.upload_file(resource_id, file)
         data = {"file_url": url}
         ResourceManager.update_resource(resource_id, data)
         return {
-            "message": "You successfully changed this resource's status to To Read"
+            "message": f"You successfully uploaded the file in the following location: {url}"
+        }, status.HTTP_200_OK
+
+
+class DeleteFileResource(Resource):
+    @auth.login_required
+    def delete(self, resource_id):
+        owner = auth.current_user()
+        ResourceManager.authenticate_owner(resource_id, owner.user_id)
+        resource = ResourceManager.get_single_resource(resource_id)
+        url = FullResourceSchemaResponse().dump(resource)["file_url"]
+        if url == "":
+            return {
+                "message": "Don't try to fool us! There is no file associated with this resource \N{slightly smiling face}"
+            }, status.HTTP_400_BAD_REQUEST
+        file_name = url.split("/")[-1]
+        ResourceManager.delete_file(file_name)
+        data = {"file_url": ""}
+        ResourceManager.update_resource(resource_id, data)
+        return {
+            "message": "The file is now gone forever \N{unamused face}"
         }, status.HTTP_200_OK

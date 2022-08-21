@@ -23,4 +23,5 @@ routes = (
     (GetUserInfoResource, "/my_user/"),
     (UpdateUserResource, "/update_user/"),
     (UploadFileResource, "/upload_file/<int:resource_id>/"),
+    (DeleteFileResource, "/delete_file/<int:resource_id>/"),
 )

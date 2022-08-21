@@ -83,11 +83,14 @@ class ResourceManager:
 
     @staticmethod
     def delete_resource(resource_id):
-        resource = ResourceManager.get_single_resource(resource_id)
-        assignments = ResourceManager.find_assignments(resource_id)
-        assignments.delete(synchronize_session=False)
-        db.session.delete(resource)
-        db.session.commit()
+        try:
+            resource = ResourceManager.get_single_resource(resource_id)
+            assignments = ResourceManager.find_assignments(resource_id)
+            assignments.delete(synchronize_session=False)
+            db.session.delete(resource)
+            db.session.commit()
+        except Exception as ex:
+            return ex
 
     @staticmethod
     def update_resource(resource_id, data):
@@ -103,10 +106,17 @@ class ResourceManager:
 
     @staticmethod
     def upload_file(resource_id, file):
-        extension = file.filename.split('.')[1]
+        extension = file.filename.split(".")[1]
         name = f"{str(uuid.uuid4())}.{extension}"
         file.save(os.path.join(TEMP_FILE_FOLDER, f"{name}"))
         path = os.path.join(TEMP_FILE_FOLDER, f"{name}")
         url = s3.upload_file(path, name)
         delete_local_file(name)
         return url
+
+    @staticmethod
+    def delete_file(file_name):
+        try:
+            s3.delete_file(file_name)
+        except Exception as ex:
+            return ex

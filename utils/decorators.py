@@ -34,5 +34,3 @@ def permission_required(role):
         return wrapper
 
     return decorated_function
-
-

@@ -19,4 +19,4 @@ class UpdateResourceSchemaRequest(Schema):
 
 
 class UploadFileResourceSchemaRequest(Schema):
-    file = fields.Raw(required=True, type='file')
+    file = fields.Raw(required=True, type="file")

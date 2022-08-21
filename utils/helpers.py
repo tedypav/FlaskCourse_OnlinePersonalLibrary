@@ -1,7 +1,5 @@
 import os
 
-from werkzeug.exceptions import BadRequest
-
 from constants import TEMP_FILE_FOLDER
 
 
