@@ -15,7 +15,7 @@ class BaseFactory(factory.Factory):
     def create(cls, **kwargs):
         object = super().create(**kwargs)
         db.session.add(object)
-        db.session.flush()
+        db.session.commit()
         return object
 
 

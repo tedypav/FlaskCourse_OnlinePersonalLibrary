@@ -103,7 +103,7 @@ class TestUser(TestCase):
             == "The provided password is incorrect. Please, try again 😔"
         )
 
-    def test_get_others_user_info(self):
+    def test_get_own_user_info(self):
         url = "/my_user/"
 
         user = UserFactory()
@@ -120,7 +120,6 @@ class TestUser(TestCase):
         url = "/update_user/"
 
         user = UserFactory()
-        db.session.commit()
         token = generate_token(user)
         headers = {
             "Authorization": f"Bearer {token}",
