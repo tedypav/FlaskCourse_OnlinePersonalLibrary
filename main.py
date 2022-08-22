@@ -16,5 +16,5 @@ def close_request(response):
     return response
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()

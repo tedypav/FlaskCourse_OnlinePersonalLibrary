@@ -28,8 +28,8 @@ class UpdateUserResource(Resource):
         data = request.get_json()
         if data == {}:
             return {
-                       "message": f"You need to provide us with information to be updated."
-                   }, status.HTTP_400_BAD_REQUEST
+                "message": f"You need to provide us with information to be updated."
+            }, status.HTTP_400_BAD_REQUEST
         UserManager.update_user(owner.user_id, data)
         return {
             "message": f"You successfully updated your user information."

@@ -4,6 +4,7 @@ from config import create_app
 from db import db
 from models import ResourceModel
 
+
 class TestApp(TestCase):
     def create_app(self):
         return create_app("config.TestingConfig")
@@ -115,9 +116,12 @@ class TestApp(TestCase):
             "Content-Type": "application/json",
         }
         resource_id = register_resource_resp.json["resource"]["resource_id"]
-        update_resource_data = { "resource_id": resource_id,
-            "title": "Test Book 2", "author": "Test Author, Second Author"
-                                 , "notes": "We want to test the update feature of the resources."}
+        update_resource_data = {
+            "resource_id": resource_id,
+            "title": "Test Book 2",
+            "author": "Test Author, Second Author",
+            "notes": "We want to test the update feature of the resources.",
+        }
 
         update_resource_resp = self.client.put(
             "/update_resource/", headers=headers, json=update_resource_data
@@ -125,14 +129,13 @@ class TestApp(TestCase):
 
         assert update_resource_resp.status_code == 200
         assert (
-                update_resource_resp.json["message"]
-                == f"You successfully updated resource with ID = {resource_id}."
+            update_resource_resp.json["message"]
+            == f"You successfully updated resource with ID = {resource_id}."
         )
 
         # for key, value in register_resource_resp.json["resource"].items():
         #     if key in resource_data:
         #         assert value == resource_data[key]
-
 
         # Tag a resource
 
@@ -272,4 +275,3 @@ class TestApp(TestCase):
         for resource in get_updated_resources_resp.json["resources"]:
             for tag in resource["tags"]:
                 assert tag["tag"] != "test"
-

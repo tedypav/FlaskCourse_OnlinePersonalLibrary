@@ -14,7 +14,6 @@ from tests.factories import UserFactory, ResourceFactory, TagFactory
 
 
 class TestTag(TestCase):
-
     def create_app(self):
         return create_app("config.TestingConfig")
 
@@ -44,12 +43,12 @@ class TestTag(TestCase):
         }
         data1 = {
             "resource_id": new_resource1.resource_id,
-            "tag": ["test_tag", "test", "tag", "test", "test"]
+            "tag": ["test_tag", "test", "tag", "test", "test"],
         }
 
         data12 = {
             "resource_id": new_resource12.resource_id,
-            "tag": ["test_tag", "more_test", "more_tag", "resource"]
+            "tag": ["test_tag", "more_test", "more_tag", "resource"],
         }
 
         token2 = generate_token(user2)
@@ -59,7 +58,7 @@ class TestTag(TestCase):
         }
         data2 = {
             "resource_id": new_resource2.resource_id,
-            "tag": ["test_tag", "test", "tag", "tag", "more_tag"]
+            "tag": ["test_tag", "test", "tag", "tag", "more_tag"],
         }
         resp1 = self.client.post(url, headers=headers1, json=data1)
         assert resp1.status_code == 201
@@ -109,12 +108,12 @@ class TestTag(TestCase):
         }
         data1 = {
             "resource_id": new_resource1.resource_id,
-            "tag": [tag1, "test", "tag", "test", "test"]
+            "tag": [tag1, "test", "tag", "test", "test"],
         }
 
         data12 = {
             "resource_id": new_resource12.resource_id,
-            "tag": [tag1, "more_test", "more_tag", "resource"]
+            "tag": [tag1, "more_test", "more_tag", "resource"],
         }
 
         token2 = generate_token(user2)
@@ -124,7 +123,7 @@ class TestTag(TestCase):
         }
         data2 = {
             "resource_id": new_resource2.resource_id,
-            "tag": ["test_tag", "test", "tag", "tag", "more_tag"]
+            "tag": ["test_tag", "test", "tag", "tag", "more_tag"],
         }
         resp1 = self.client.post(url, headers=headers1, json=data1)
         assert resp1.status_code == 201
@@ -141,9 +140,14 @@ class TestTag(TestCase):
 
         user1_num_tags = len(TagManager.get_tags(user1))
         user2_num_tags = len(TagManager.get_tags(user2))
-        tested_resp1 = self.client.delete(f"/delete_tag/{tag1}/", headers=tested_headers1)
+        tested_resp1 = self.client.delete(
+            f"/delete_tag/{tag1}/", headers=tested_headers1
+        )
         assert tested_resp1.status_code == 200
-        assert tested_resp1.json["message"] == f"You successfully deleted the tag {tag1} and all assignments associated to it."
+        assert (
+            tested_resp1.json["message"]
+            == f"You successfully deleted the tag {tag1} and all assignments associated to it."
+        )
         user1_num_tags_after_delete = len(TagManager.get_tags(user1))
         user2_num_tags_after_delete = len(TagManager.get_tags(user2))
         assert user1_num_tags - 1 == user1_num_tags_after_delete

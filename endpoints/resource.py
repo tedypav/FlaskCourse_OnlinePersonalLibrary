@@ -151,7 +151,7 @@ class UploadFileResource(Resource):
             file = request.files["file"]
             resource = ResourceManager.get_single_resource(resource_id)
             current_url = FullResourceSchemaResponse().dump(resource)["file_url"]
-            if not current_url == "":
+            if not current_url is None:
                 file_name = current_url.split("/")[-1]
                 ResourceManager.delete_file(file_name)
             url = ResourceManager.upload_file(resource_id, file)

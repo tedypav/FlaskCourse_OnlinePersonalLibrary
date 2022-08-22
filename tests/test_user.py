@@ -126,11 +126,11 @@ class TestUser(TestCase):
             "Content-Type": "application/json",
         }
         data = {
-                "first_name" : "Test",
-                "last_name" : "Testov",
-                "company" : "Random Comp",
-                "job_position" : "Tester"
-            }
+            "first_name": "Test",
+            "last_name": "Testov",
+            "company": "Random Comp",
+            "job_position": "Tester",
+        }
         resp = self.client.put(url, headers=headers, json=data)
         self.assert200(resp)
 
@@ -156,5 +156,7 @@ class TestUser(TestCase):
         resp = self.client.put(url, headers=headers, json=data)
         self.assert400(resp)
 
-        assert resp.json["message"] == "You need to provide us with information to be updated."
-
+        assert (
+            resp.json["message"]
+            == "You need to provide us with information to be updated."
+        )
