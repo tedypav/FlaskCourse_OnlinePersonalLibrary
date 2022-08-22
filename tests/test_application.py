@@ -2,6 +2,7 @@ from flask_testing import TestCase
 
 from config import create_app
 from db import db
+from models import ResourceModel
 
 AUTHORISED_ENDPOINTS_DATA = (
     ("POST", "/new_resource/"),
@@ -26,9 +27,7 @@ UNAUTHORISED_ENDPOINTS_DATA = (
     ("POST", "/login/"),
 )
 
-NO_INPUT_ENDPOINTS_DATA = (
-    ("GET", "/general_stats/"),
-)
+NO_INPUT_ENDPOINTS_DATA = (("GET", "/general_stats/"),)
 
 
 class TestApp(TestCase):
@@ -44,12 +43,12 @@ class TestApp(TestCase):
         db.drop_all()
 
     def iterate_endpoints(
-            self,
-            endpoints_data,
-            status_code_method,
-            expected_resp_body,
-            headers=None,
-            payload=None,
+        self,
+        endpoints_data,
+        status_code_method,
+        expected_resp_body,
+        headers=None,
+        payload=None,
     ):
         if not headers:
             headers = {}
@@ -72,30 +71,37 @@ class TestApp(TestCase):
 
     def test_protected_endpoints(self):
         self.iterate_endpoints(
-            AUTHORISED_ENDPOINTS_DATA, self.assert_401,
-            {"message": "You need a token to get access to this endpoint \N{winking face}"}
+            AUTHORISED_ENDPOINTS_DATA,
+            self.assert_401,
+            {
+                "message": "You need a token to get access to this endpoint \N{winking face}"
+            },
         )
 
     def test_unprotected_endpoints(self):
-        self.iterate_endpoints(
-            UNAUTHORISED_ENDPOINTS_DATA, self.assert_400, ""
-        )
+        self.iterate_endpoints(UNAUTHORISED_ENDPOINTS_DATA, self.assert_400, "")
 
     def test_no_input_endpoints(self):
-        self.iterate_endpoints(
-            NO_INPUT_ENDPOINTS_DATA, self.assert_200, ""
-        )
+        self.iterate_endpoints(NO_INPUT_ENDPOINTS_DATA, self.assert_200, "")
 
     def test_expired_token_raises(self):
-        headers = {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjM2LCJleHAiOjE2NjA4OTE1MTZ9.pbx2hPf9hi7JhHkRPsHeQIrcDKsZn9n80jNCVaPo3IA"}
+        headers = {
+            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjM2LCJleHAiOjE2NjA4OTE1MTZ9.pbx2hPf9hi7JhHkRPsHeQIrcDKsZn9n80jNCVaPo3IA"
+        }
         self.iterate_endpoints(
-            AUTHORISED_ENDPOINTS_DATA, self.assert_401, {"message": "Sorry, your token has expired. Please, log in again."}, headers
+            AUTHORISED_ENDPOINTS_DATA,
+            self.assert_401,
+            {"message": "Sorry, your token has expired. Please, log in again."},
+            headers,
         )
 
     def test_invalid_token_raises(self):
-        headers = {
-            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGcin9n80jNCVaPo3IA"}
+        headers = {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGcin9n80jNCVaPo3IA"}
         self.iterate_endpoints(
-            AUTHORISED_ENDPOINTS_DATA, self.assert_401,
-            {"message": "Sorry, your token is invalid \N{unamused face}. Please, register or login again to obtain a valid token."}, headers
+            AUTHORISED_ENDPOINTS_DATA,
+            self.assert_401,
+            {
+                "message": "Sorry, your token is invalid \N{unamused face}. Please, register or login again to obtain a valid token."
+            },
+            headers,
         )

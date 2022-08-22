@@ -13,7 +13,7 @@ class ListTagsResource(Resource):
         resources = TagManager.get_tags(owner)
         return {
             "message": "Below is a list of all tags you have previously used \N{slightly smiling face}",
-            "resources": TagSchemaResponse().dump(resources, many=True),
+            "tags": TagSchemaResponse().dump(resources, many=True),
         }, status.HTTP_200_OK
 
 

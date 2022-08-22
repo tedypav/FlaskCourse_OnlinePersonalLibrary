@@ -1,5 +1,7 @@
+import io
 import os
 from unittest.mock import patch
+from werkzeug.datastructures import FileStorage
 
 from flask_testing import TestCase
 
@@ -14,8 +16,6 @@ from tests.factories import UserFactory, ResourceFactory
 
 
 class TestResourceRegister(TestCase):
-
-
     def create_app(self):
         return create_app("config.TestingConfig")
 
@@ -64,25 +64,37 @@ class TestResourceRegister(TestCase):
         resp = self.client.put(url, headers=headers, json=data)
         self.assert403(resp)
 
-        assert resp.json["message"] == "You need to be the owner of this resource to change or delete it 😒"
+        assert (
+            resp.json["message"]
+            == "You need to be the owner of this resource to change or delete it 😒"
+        )
 
         url_status1 = f"/resource_status/{resource.resource_id}/read/"
         resp = self.client.put(url_status1, headers=headers, json=data)
         self.assert403(resp)
 
-        assert resp.json["message"] == "You need to be the owner of this resource to change or delete it 😒"
+        assert (
+            resp.json["message"]
+            == "You need to be the owner of this resource to change or delete it 😒"
+        )
 
         url_status2 = f"/resource_status/{resource.resource_id}/dropped/"
         resp = self.client.put(url_status2, headers=headers, json=data)
         self.assert403(resp)
 
-        assert resp.json["message"] == "You need to be the owner of this resource to change or delete it 😒"
+        assert (
+            resp.json["message"]
+            == "You need to be the owner of this resource to change or delete it 😒"
+        )
 
         url_status3 = f"/resource_status/{resource.resource_id}/to_read/"
         resp = self.client.put(url_status3, headers=headers, json=data)
         self.assert403(resp)
 
-        assert resp.json["message"] == "You need to be the owner of this resource to change or delete it 😒"
+        assert (
+            resp.json["message"]
+            == "You need to be the owner of this resource to change or delete it 😒"
+        )
 
     def test_delete_others_resource(self):
         user1 = UserFactory()
@@ -97,7 +109,10 @@ class TestResourceRegister(TestCase):
         resp = self.client.delete(url, headers=headers)
         self.assert403(resp)
 
-        assert resp.json["message"] == "You need to be the owner of this resource to change or delete it 😒"
+        assert (
+            resp.json["message"]
+            == "You need to be the owner of this resource to change or delete it 😒"
+        )
 
     def test_get_all_resources(self):
         url = "/my_resources/"
@@ -134,27 +149,59 @@ class TestResourceRegister(TestCase):
         }
         data = {
             "resource_id": new_resource2.resource_id,
-            "tag": ["test_tag", "test", "tag"]
+            "tag": ["test_tag", "test", "tag"],
         }
         resp = self.client.post(url, headers=headers, json=data)
         self.assert403(resp)
 
-        assert resp.json["message"] == "You need to be the owner of this resource to change or delete it 😒"
+        assert (
+            resp.json["message"]
+            == "You need to be the owner of this resource to change or delete it 😒"
+        )
 
-        total_assignments = ResourceManager.find_assignments(new_resource2.resource_id).count()
-        a = 0
+        total_assignments = ResourceManager.find_assignments(
+            new_resource2.resource_id
+        ).count()
+
         assert total_assignments == 0
 
         data = {
             "resource_id": new_resource.resource_id,
-            "tag": ["test_tag", "test", "tag"]
+            "tag": ["test_tag", "test", "tag"],
         }
         resp = self.client.post(url, headers=headers, json=data)
         assert resp.status_code == 201
 
         assert resp.json["message"] == "You successfully tagged the resource 🙂"
 
-        for tag in resp.json["resources"]["tags"]:
+        for tag in resp.json["resource"]["tags"]:
             assert tag["tag"] in data["tag"]
 
-        assert len(resp.json["resources"]["tags"]) == len(set(data["tag"]))
+        assert len(resp.json["resource"]["tags"]) == len(set(data["tag"]))
+
+    def test_upload_file_invalid_resources(self):
+        user = UserFactory()
+        user2 = UserFactory()
+        new_resource2 = ResourceFactory(owner_id=user2.user_id)
+
+        token = generate_token(user)
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        data = {}
+
+        url = f"/upload_file/{new_resource2.resource_id}/"
+        resp = self.client.post(url, headers=headers, json=data)
+        self.assert403(resp)
+        assert (
+            resp.json["message"]
+            == "You need to be the owner of this resource to change or delete it 😒"
+        )
+
+        url = f"/upload_file/{1000}/"
+        resp = self.client.post(url, headers=headers, json=data)
+        self.assert400(resp)
+        assert (
+            resp.json["message"]
+            == "Don't try to trick us, this resource doesn't exist! 😉"
+        )

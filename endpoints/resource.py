@@ -5,7 +5,11 @@ from flask_restful import Resource
 from managers.auth import auth
 from managers.resource import ResourceManager
 from managers.tag import TagManager
-from schemas.request.resource import ResourceSchemaRequest, UpdateResourceSchemaRequest, UploadFileResourceSchemaRequest
+from schemas.request.resource import (
+    ResourceSchemaRequest,
+    UpdateResourceSchemaRequest,
+    UploadFileResourceSchemaRequest,
+)
 from schemas.request.tag import TagSchemaRequest
 from schemas.response.resource import ResourceSchemaResponse, FullResourceSchemaResponse
 from schemas.response.tag import TagSchemaResponse
@@ -52,7 +56,7 @@ class TagResourceResource(Resource):
 
         return {
             "message": "You successfully tagged the resource \N{slightly smiling face}",
-            "resources": FullResourceSchemaResponse().dump(resource),
+            "resource": FullResourceSchemaResponse().dump(resource),
         }, status.HTTP_201_CREATED
 
 
@@ -140,22 +144,27 @@ class UpdateResourceResource(Resource):
 
 class UploadFileResource(Resource):
     @auth.login_required
-    @validate_schema(UploadFileResourceSchemaRequest)
     def post(self, resource_id):
         owner = auth.current_user()
-        file = request.files["file"]
         ResourceManager.authenticate_owner(resource_id, owner.user_id)
-        resource = ResourceManager.get_single_resource(resource_id)
-        current_url = FullResourceSchemaResponse().dump(resource)["file_url"]
-        if not current_url == "":
-            file_name = current_url.split("/")[-1]
-            ResourceManager.delete_file(file_name)
-        url = ResourceManager.upload_file(resource_id, file)
-        data = {"file_url": url}
-        ResourceManager.update_resource(resource_id, data)
-        return {
-            "message": f"You successfully uploaded the file in the following location: {url}"
-        }, status.HTTP_200_OK
+        try:
+            file = request.files["file"]
+            resource = ResourceManager.get_single_resource(resource_id)
+            current_url = FullResourceSchemaResponse().dump(resource)["file_url"]
+            if not current_url == "":
+                file_name = current_url.split("/")[-1]
+                ResourceManager.delete_file(file_name)
+            url = ResourceManager.upload_file(resource_id, file)
+            data = {"file_url": url}
+            ResourceManager.update_resource(resource_id, data)
+            return {
+                "message": f"You successfully uploaded the file in the following location: {url}"
+            }, status.HTTP_200_OK
+
+        except:
+            return {
+                "message": "You probably forgot to attach the file \N{slightly smiling face} Please, provide it in the form-data section, with key = file."
+            }, status.HTTP_400_BAD_REQUEST
 
 
 class DeleteFileResource(Resource):
