@@ -12,8 +12,8 @@ class ListTagsResource(Resource):
         owner = auth.current_user()
         resources = TagManager.get_tags(owner)
         return {
-            "messages": "Below is a list of all tags you have previously used \N{slightly smiling face}",
-            "resources": TagSchemaResponse().dump(resources, many=True),
+            "message": "Below is a list of all tags you have previously used \N{slightly smiling face}",
+            "tags": TagSchemaResponse().dump(resources, many=True),
         }, status.HTTP_200_OK
 
 

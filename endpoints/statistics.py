@@ -10,7 +10,7 @@ class GeneralStatsResource(Resource):
         resource_stats = StatisticsManager.get_resources_stats()
         tag_stats = StatisticsManager.get_tags_stats()
         return {
-            "messages": "Below are the most recent statistics from our database \N{slightly smiling face}",
+            "message": "Below are the most recent statistics from our database \N{slightly smiling face}",
             "user_stats": user_stats,
             "resource_stats": resource_stats,
             "tag_stats": tag_stats,

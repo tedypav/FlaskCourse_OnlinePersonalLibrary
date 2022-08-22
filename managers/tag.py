@@ -38,7 +38,6 @@ class TagManager:
 
         db.session.add(data)
         db.session.commit()
-        db.session.flush()
         return TagModel.query.filter_by(tag=tag, owner_id=owner.user_id).first()
 
     @staticmethod
