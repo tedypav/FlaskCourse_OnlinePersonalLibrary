@@ -31,7 +31,7 @@ class ListResourceResource(Resource):
         owner = auth.current_user()
         resources = ResourceManager.get_resources(owner)
         return {
-            "messages": "Below is a list of all resources you have previously registered \N{slightly smiling face}",
+            "message": "Below is a list of all resources you have previously registered \N{slightly smiling face}",
             "resources": FullResourceSchemaResponse().dump(resources, many=True),
         }, status.HTTP_200_OK
 
@@ -51,7 +51,7 @@ class TagResourceResource(Resource):
             TagManager.assign_tag(resource_id, tag_info.tag_id)
 
         return {
-            "messages": "You successfully tagged the resource \N{slightly smiling face}",
+            "message": "You successfully tagged the resource \N{slightly smiling face}",
             "resources": FullResourceSchemaResponse().dump(resource),
         }, status.HTTP_201_CREATED
 
@@ -111,7 +111,7 @@ class GetResourceByTagResource(Resource):
         )
         if assignments is None:
             return {
-                "messages": f"You still haven't tagged anything as '{tag}' \N{slightly smiling face}"
+                "message": f"You still haven't tagged anything as '{tag}' \N{slightly smiling face}"
             }
         for assignment in assignments:
             resource_id = assignment[1]
@@ -119,7 +119,7 @@ class GetResourceByTagResource(Resource):
             assigned_resources.append(ResourceSchemaResponse().dump(resource_info))
 
         return {
-            "messages": f"Below are all resources you tagged as '{tag}'",
+            "message": f"Below are all resources you tagged as '{tag}'",
             "resources": assigned_resources,
         }, status.HTTP_200_OK
 

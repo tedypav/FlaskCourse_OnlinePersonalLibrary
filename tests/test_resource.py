@@ -6,6 +6,7 @@ from flask_testing import TestCase
 import constants
 from db import db
 from config import create_app
+from managers.resource import ResourceManager
 from managers.user import UserManager
 from models import UserModel, ResourceModel
 from tests.base import generate_token
@@ -118,3 +119,42 @@ class TestResourceRegister(TestCase):
 
         assert len(resp.json["resources"]) == 2
 
+    def test_tag_resource(self):
+        url = "/tag_resource/"
+
+        user = UserFactory()
+        user2 = UserFactory()
+        new_resource = ResourceFactory(owner_id=user.user_id)
+        new_resource2 = ResourceFactory(owner_id=user2.user_id)
+
+        token = generate_token(user)
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+        data = {
+            "resource_id": new_resource2.resource_id,
+            "tag": ["test_tag", "test", "tag"]
+        }
+        resp = self.client.post(url, headers=headers, json=data)
+        self.assert403(resp)
+
+        assert resp.json["message"] == "You need to be the owner of this resource to change or delete it 😒"
+
+        total_assignments = ResourceManager.find_assignments(new_resource2.resource_id).count()
+        a = 0
+        assert total_assignments == 0
+
+        data = {
+            "resource_id": new_resource.resource_id,
+            "tag": ["test_tag", "test", "tag"]
+        }
+        resp = self.client.post(url, headers=headers, json=data)
+        assert resp.status_code == 201
+
+        assert resp.json["message"] == "You successfully tagged the resource 🙂"
+
+        for tag in resp.json["resources"]["tags"]:
+            assert tag["tag"] in data["tag"]
+
+        assert len(resp.json["resources"]["tags"]) == len(set(data["tag"]))
