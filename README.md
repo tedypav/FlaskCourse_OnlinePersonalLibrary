@@ -48,7 +48,22 @@ and run the command:
 
 ## Project structure
 
+
+
 ## Future project development
+
+There are still many things that need to be added to the library. Here's a list:
+
+1. Feature: Being able to search by words in the notes of the resources.
+1. Record last login time and user activity. These could later be used to enhance the personal statistics.
+1. Add an endpoint for personal statistics, so users could track their resources and activity.
+1. Create collections, so that users can group resources and tags together, then browse by them.
+1. Feature: Being able to browse resource by status.
+1. Feature: Being able to share resources you have registered with other users of the library.
+1. Introduce user roles (readers, administrators).
+1. Being able to delete users (this should only be an option for the administrators).
+1. Feature: Being able to replicate other people's resources (those that are shared with you).
+1. Feature: Being able to change your password and registered e-mail.
 
 # REST API
 
@@ -452,7 +467,7 @@ To change the resource's status to "Dropped":
 
 `/resource_status/<resource_id>/dropped/`
 
-    curl --location --request PUT 'http://localhost:5000/resource_status/<resource_id>/dropped'
+    curl --location --request PUT 'http://localhost:5000/resource_status/<resource_id>/dropped/'
     Headers: "Authorization": "Bearer <token>"
 
 #### Response
@@ -478,7 +493,7 @@ To change the resource's status to "Read":
 
 `/resource_status/<resource_id>/read/`
 
-    curl --location --request PUT 'http://localhost:5000/resource_status/<resource_id>/read'
+    curl --location --request PUT 'http://localhost:5000/resource_status/<resource_id>/read/'
     Headers: "Authorization": "Bearer <token>"
 
 #### Response
@@ -494,7 +509,7 @@ To change the resource's status to "To Read":
 
 `/resource_status/<resource_id>/to_read/`
 
-    curl --location --request PUT 'http://localhost:5000/resource_status/<resource_id>/to_read'
+    curl --location --request PUT 'http://localhost:5000/resource_status/<resource_id>/to_read/'
     Headers: "Authorization": "Bearer <token>"
 
 
