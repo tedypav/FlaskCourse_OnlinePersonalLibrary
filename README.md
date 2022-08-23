@@ -98,7 +98,7 @@ it has to offer.
           password (mandatory; needs to have at least 6 characters, at least 1 lowercase letter, 
                      at least 1 capital letter, at least 1 digit, at least 1 special symbol of the
                      following: ["$", "@", "#", "%", "^", "*", ")", ".", "(", "-", "=", "!", "&", "+"])
-          phone (optional; a valid phone number)
+          phone (optional; a valid phone number of the format "+[country code][phone number]")
           company (optional; a string between 1 and 50 characters)
           job_position (optional; a string between 1 and 50 characters)
 
@@ -179,6 +179,84 @@ After you've been registered for a while, you'll probably want to check your pro
 
 `/my_user/`
 
-    curl --location --request GET 'http://localhost:5000/my_user'
+    curl --location --request GET 'http://localhost:5000/my_user/'
 
     Headers: "Authorization": "Bearer token"
+
+#### Response
+
+If your token is valid, you'll get your user information.
+
+    Status: 200 OK
+    Body: "message": "Below you'll find your user information."
+          "user": {
+                     "company": "Test Co",
+                     "job_position": "QA Tester",
+                     "user_id": 0,
+                     "first_name": "Test",
+                     "last_name": "Testing",
+                     "email": "test.testing@example.com",
+                     "phone": "+[country code][valid phone number]"
+                     }
+
+If your token has expired or invalid, however, you'll get:
+
+    Status: 401 UNAUTHORIZED
+    Body: "message": "Sorry, your token is invalid 😒. Please, register or login again to obtain a valid token."
+
+or
+
+    Status: 401 UNAUTHORIZED
+    Body: "message": "Sorry, your token has expired. Please, log in again."
+
+This is applicable for all endpoints that require authorization.
+
+### Update your user information
+
+At some point you may want to change your information, here is how to do it.
+
+#### Request
+
+`/update_user/`
+
+    curl --location --request PUT 'http://localhost:5000/update_user/'
+
+    Headers: "Authorization": "Bearer token"
+             "Content-Type": "application/json"
+    Body: first_name (optional; a string between 1 and 30 characters)
+          last_name (optional; a string between 1 and 30 characters)
+          phone (optional; a valid phone number of the format "+[country code][phone number]")
+          company (optional; a string between 1 and 50 characters)
+          job_position (optional; a string between 1 and 50 characters)
+
+#### Response
+
+If you put valid information and managed to authenticate, you'll get:
+
+    Status: 200 OK
+    Body: "message": "You successfully updated your user information."
+
+You will see a successful message, even if you don't provide any new information.
+
+If you added an unregistered field, the API will throw an error:
+
+    Status: 400 BAD REQUEST
+    Body: "message": "unregistered_field": ["Unknown field."]
+
+You'll get a similar message if you make a mistake in the fields' data type:
+
+    Status: 400 BAD REQUEST
+    Body: "message": "job_position": ["Not a valid string."]
+
+## Resource requests
+
+The main objects you'll work with in the library are the resources. They could be of many types:
+books, articles, videos, magazines, etc.
+
+### Register a resource
+
+
+
+
+## Tag requests
+
