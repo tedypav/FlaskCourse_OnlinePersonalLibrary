@@ -18,18 +18,7 @@ The application has the following features:
 Below you will get more information on how to use the application 🙂 Have fun!
 
 ## Table of contents
-- [Online Library](#online-library)
-- [Project walk-though](#project-walk-though)
-  * [Install](#install)
-  * [Run the app](#run-the-app)
-  * [Run the tests](#run-the-tests)
-- [REST API](#rest-api)
-  * [General statistics](#general-statistics)
-  * [User requests](#user-requests)
-    + [Register to the library](#register-to-the-library)
-      - [Request](#request)
-      - [Response](#response)
-    + [Login](#login)
+
 
 # Project walk-though
 
@@ -185,7 +174,7 @@ After you've been registered for a while, you'll probably want to check your pro
 
     curl --location --request GET 'http://localhost:5000/my_user/'
 
-    Headers: "Authorization": "Bearer token"
+    Headers: "Authorization": "Bearer <token>"
 
 #### Response
 
@@ -225,7 +214,7 @@ At some point you may want to change your information, here is how to do it.
 
     curl --location --request PUT 'http://localhost:5000/update_user/'
 
-    Headers: "Authorization": "Bearer token"
+    Headers: "Authorization": "Bearer <token>"
              "Content-Type": "application/json"
     Body: first_name (optional; a string between 1 and 30 characters)
           last_name (optional; a string between 1 and 30 characters)
@@ -267,7 +256,7 @@ to the endpoint below.
 `/new_resource/`
 
     curl --location --request POST 'http://localhost:5000/new_resource/'
-    Headers: "Authorization": "Bearer token"
+    Headers: "Authorization": "Bearer <token>"
              "Content-Type": "application/json"
     Body: title (mandatory; a string between 3 and 150 characters)
           author (mandatory; a string between 3 and 150 characters)
@@ -304,7 +293,7 @@ would like to save it somewhere. The Online Library can help here, too.
 `/upload_file/<resource_id>/`
 
     curl --location --request POST 'http://localhost:5000/upload_file/<resource_id>/'
-    Headers: "Authorization": "Bearer token"
+    Headers: "Authorization": "Bearer <token>"
     Form: file=<path to uploaded file>
 
 The specific thing about this endpoint is that the file needs to be provided through "form-data".
@@ -337,7 +326,7 @@ tagging is case-sensitive, so be careful with the tagging.
 `/tag_resource/`
 
     curl --location --request POST 'http://localhost:5000/tag_resource/'
-    Headers: "Authorization": "Bearer token"
+    Headers: "Authorization": "Bearer <token>"
              "Content-Type": "application/json"
     Body: resource_id (mandatory; the ID of the resource you'd like to tag; you can check it from the
                       "Get all your resources" endpoint)
@@ -370,88 +359,237 @@ And if you provide an empty string, it also doesn't count:
 
 ### Get all your resources
 
+To get all of the available information about your resources, check out the next endpoint.
+
 #### Request
 
 `/my_resources/`
 
+    curl --location --request GET 'http://localhost:5000/my_resources/'
+    Headers: "Authorization": "Bearer <token>"
+
 #### Response
+
+If everything is okay with your token, you'll get it right away:
+
+    Status: 200 OK
+    Body: "message": "Below is a list of all resources you have previously registered 🙂"
+          "resources": [<resource information>]
 
 ### Get resources by tag
 
+An important feature is being able to easily find all the resources you previously registered 
+and tagged in a certain way. This will probably be very handy whenever you're writing about a topic 
+you've already researched before, so this time you can get your resources and notes straightaway.
 
 #### Request
 
 `/my_resources_with_tag/<tag>/`
 
+    curl --location --request GET 'http://localhost/my_resources_with_tag/<tag>/'
+    Headers: "Authorization": "Bearer <token>"
+
 #### Response
 
+If you entered a valid tag, you'll get the list:
 
+    Status: 200 OK
+    Body: "message": "Below are all resources you tagged as <tag>"
+          "resources": [<resource information>]
 
+If you entered a tag you haven't used before, you'd get the following response:
+
+    Status: 400 BAD REQUEST
+    Body: "message": "You haven't used this tag before 😒"
 
 ### Update a resource
+
+There are many reasons why you'd like to update your resource - you mistyped the title, want to add
+notes, want to change the link... All of these are possible with the next endpoint.
 
 #### Request
 
 `/update_resource/`
 
+    curl --location --request PUT 'http://localhost:5000/update_resource/'
+    Headers: "Authorization": "Bearer <token>"
+             "Content-Type": "application/json"
+    Body: resource_id (mandatory; the ID of the resource to be updated)
+          title (optional; a string between 3 and 150 characters)
+          author (optional; a string between 3 and 150 characters)
+          link (optional; a string between 3 and 300 characters)
+          notes (optional; a text field)
+          rating (optional; a number between 0 and 5, with maximum 1 number after the decimal sign)
+
+
 #### Response
 
+If you try to update a resource which you haven't registered before, you won't succeed:
+
+    Status: 403 FORBIDDEN
+    Body: "message": "You need to be the owner of this resource to change or delete it 😒"
+
+If you try to update a non-existent resource, this will also be a problem:
+
+    Status: 400 BAD REQUEST
+    Body: "message": "Don't try to trick us, this resource doesn't exist! 😉"
+
+But if you provide correct information, you'll be rewarded with:
+
+    Status: 200 OK
+    Body: "message": "You successfully updated resource with ID = <resource_id>."
 
 ### Change resource status
 
+As you consume the resources, you might want to change their status, so they wouldn't all stay in the
+ "To Read" section. The next three endpoints behave in the same way and could be put in one group. 
+The failure messages are the same for all of them, so they are only mentioned in the "Dropped" status
+ update.
+
 #### Request
+
+To change the resource's status to "Dropped":
+
 `/resource_status/<resource_id>/dropped/`
 
+    curl --location --request PUT 'http://localhost:5000/resource_status/<resource_id>/dropped'
+    Headers: "Authorization": "Bearer <token>"
+
 #### Response
 
+Success looks like this:
+
+    Status: 200 OK
+    Body: "message": "You successfully changed this resource's status to Dropped"
+
+If the resource doesn't exist, you'll get:
+
+    Status: 400 BAD REQUEST
+    Body: "message": "Don't try to trick us, this resource doesn't exist! 😉"
+
+If you try to change another user's resource, you won't succeed:
+
+    Status: 403 FORBIDDEN
+    Body: "message": "You need to be the owner of this resource to change or delete it 😒"
 
 #### Request
+
+To change the resource's status to "Read":
+
 `/resource_status/<resource_id>/read/`
 
+    curl --location --request PUT 'http://localhost:5000/resource_status/<resource_id>/read'
+    Headers: "Authorization": "Bearer <token>"
+
 #### Response
 
+Success looks like this:
 
+    Status: 200 OK
+    Body: "message": "You successfully changed this resource's status to Read"
 
 #### Request
+
+To change the resource's status to "To Read":
+
 `/resource_status/<resource_id>/to_read/`
+
+    curl --location --request PUT 'http://localhost:5000/resource_status/<resource_id>/to_read'
+    Headers: "Authorization": "Bearer <token>"
+
 
 #### Response
 
+Success looks like this:
+
+    Status: 200 OK
+    Body: "message": "You successfully changed this resource's status to To Read"
 
 
 ### Delete a resource
 
+Naturally, you might also just want to delete a given resource.
+
 #### Request
+
 `/delete_resource/<resource_id>/`
+
+    curl --location --request DELETE 'http://localhost:5000/delete_resource/<resource_id>/'
+    Headers: "Authorization": "Bearer <token>"
 
 #### Response
 
+The failed attempts will get the same responses as with the resource updates. The successful attemps 
+go like this:
+
+    Status: 200 OK
+    Body: "message": "You successfully deleted resource with ID = <resource_id>."
+
+Along with the resource, all of its tag assignments will be deleted. But your tags will stay intact - 
+no tags are deleted through this endpoint.
 
 ### Delete a resource file
 
+Something else you might want is to delete your resource file.
+
 #### Request
+
 `/delete_file/<resource_id>/`
+
+    curl --location --request DELETE 'http://localhost:5000/delete_file/<resource_id>/'
+    Headers: "Authorization": "Bearer <token>"
 
 #### Response
 
+The failed attempts will get the same responses as with the resource updates. The successful attemps 
+go like this:
 
+    Status: 200 OK
+    Body: "message": "The file is now gone forever 😒"
 
 ## Tag requests
 
+This section has only two endpoints for tag management.
+
 ### Get all your tags
+
+This is the endpoint you can use to get all your tags, as it's easy to lose track when you're tagging 
+all kinds of responses.
 
 #### Request
 
 `/my_tags/`
 
+    curl --location --request GET 'http://localhost:5000/my_tags/'
+    Headers: "Authorization": "Bearer <token>"
+
 #### Response
 
+If everything is okay with your token, you'll get:
+
+    Status: 200 OK
+    Body: "message": "Below is a list of all tags you have previously used 🙂"
+          "tags": [<tag information>]
 
 ### Delete a tag
+
+With the way tags are created, it's really easy for you to make a mistake and mistype a tag, or simply 
+not need one anymore. In these cases you probably want to delete both the tag and all assignments to 
+it. 
 
 #### Request
 
 `/delete_tag/<tag>/`
 
+    curl --location --request DELETE 'http://localhost:5000/delete_tag/<tag>/'
+    Headers: "Authorization": "Bearer <token>"
+
 #### Response
 
+If you try to delete a tag you haven't used before, you'll get the same response as in the "Get 
+resources by tag" endpoint. If you provide the correct information, you'll receive:
+
+    Status: 200 OK
+    Body: "message": "You successfully deleted the tag <tag> and all assignments associated to it."
+
+Along with the tag, all assignments to it to existing resources will also be deleted.
