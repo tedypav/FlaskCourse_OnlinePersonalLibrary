@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest
 
 
 def validate_password(password):
-    special_symbols = ["$", "@", "#", "%", "^", "*", ")", ".", "(", "-", "="]
+    special_symbols = ["$", "@", "#", "%", "^", "*", ")", ".", "(", "-", "=", "!", "&", "+"]
     if len(password) < int(config("PASSWORD_MIN_LENGTH")):
         raise BadRequest(
             f"Your password is too short, it needs to have at least {config('PASSWORD_MIN_LENGTH')} characters."
