@@ -43,3 +43,19 @@ def validate_phone_number(phone_number):
             raise BadRequest(
                 f"The phone number you provided is not valid. Please, provide a valid number in the format '+[country code][number]' or just skip it \N{slightly smiling face}"
             )
+
+
+def validate_tag_length(tags):
+    if len(tags) == 0:
+        raise BadRequest(
+            f"You haven't provided any tags \N{slightly smiling face}"
+        )
+    for tag in tags:
+        if len(tag) > 50 :
+            raise BadRequest(
+                f"The tag {tag} is too long, please shorten it to up to 50 characters \N{slightly smiling face}"
+            )
+        if len(tag) == 0:
+            raise BadRequest(
+                f"You provided an empty string for tag... That's not cool..."
+            )
