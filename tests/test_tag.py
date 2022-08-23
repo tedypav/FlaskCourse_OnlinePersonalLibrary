@@ -1,16 +1,10 @@
-import os
-from unittest.mock import patch
-
 from flask_testing import TestCase
 
-import constants
-from db import db
 from config import create_app
+from db import db
 from managers.tag import TagManager
-from managers.user import UserManager
-from models import UserModel
 from tests.base import generate_token
-from tests.factories import UserFactory, ResourceFactory, TagFactory
+from tests.factories import UserFactory, ResourceFactory
 
 
 class TestTag(TestCase):

@@ -8,7 +8,6 @@ from managers.tag import TagManager
 from schemas.request.resource import (
     ResourceSchemaRequest,
     UpdateResourceSchemaRequest,
-    UploadFileResourceSchemaRequest,
 )
 from schemas.request.tag import TagSchemaRequest
 from schemas.response.resource import ResourceSchemaResponse, FullResourceSchemaResponse

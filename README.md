@@ -48,7 +48,7 @@ and run the command:
 
 ## Project structure
 
-
+The project consists of a few Python packages and 
 
 ## Future project development
 
@@ -64,6 +64,7 @@ There are still many things that need to be added to the library. Here's a list:
 1. Being able to delete users (this should only be an option for the administrators).
 1. Feature: Being able to replicate other people's resources (those that are shared with you).
 1. Feature: Being able to change your password and registered e-mail.
+1. Add endpoints for bulk registering of resources, tagging, update and delete.
 
 # REST API
 
@@ -77,7 +78,8 @@ question:
 ## General statistics
 
 People enjoy looking at data and statistics, therefore this endpoint is mainly for 
-users' pleasure.
+users' pleasure. Here you can check the number of registered users, resources and other interesting 
+bits of information.
 
 `/general_stats/`
 
@@ -291,7 +293,7 @@ A successful attempt's result will look like this:
                         "author": "Test Author, Test Author 2",
                         "status": "To Read",
                         "title": "My First Resource"
-}
+                      }
 
 If a field is missing, the response is:
 

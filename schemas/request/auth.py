@@ -1,5 +1,4 @@
 from decouple import config
-
 from marshmallow import fields, validate
 
 from schemas.base import AuthBase

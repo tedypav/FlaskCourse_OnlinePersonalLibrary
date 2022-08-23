@@ -5,7 +5,22 @@ from werkzeug.exceptions import BadRequest
 
 
 def validate_password(password):
-    special_symbols = ["$", "@", "#", "%", "^", "*", ")", ".", "(", "-", "=", "!", "&", "+"]
+    special_symbols = [
+        "$",
+        "@",
+        "#",
+        "%",
+        "^",
+        "*",
+        ")",
+        ".",
+        "(",
+        "-",
+        "=",
+        "!",
+        "&",
+        "+",
+    ]
     if len(password) < int(config("PASSWORD_MIN_LENGTH")):
         raise BadRequest(
             f"Your password is too short, it needs to have at least {config('PASSWORD_MIN_LENGTH')} characters."
@@ -47,11 +62,9 @@ def validate_phone_number(phone_number):
 
 def validate_tag_length(tags):
     if len(tags) == 0:
-        raise BadRequest(
-            f"You haven't provided any tags \N{slightly smiling face}"
-        )
+        raise BadRequest(f"You haven't provided any tags \N{slightly smiling face}")
     for tag in tags:
-        if len(tag) > 50 :
+        if len(tag) > 50:
             raise BadRequest(
                 f"The tag {tag} is too long, please shorten it to up to 50 characters \N{slightly smiling face}"
             )

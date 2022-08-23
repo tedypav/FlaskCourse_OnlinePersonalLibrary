@@ -1,12 +1,7 @@
-import os
-from unittest.mock import patch
-
 from flask_testing import TestCase
 
-import constants
-from db import db
 from config import create_app
-from managers.user import UserManager
+from db import db
 from models import UserModel
 from schemas.response.user import UserSchemaResponse
 from tests.base import generate_token
