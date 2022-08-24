@@ -82,8 +82,6 @@ Below you will get more information on how to use the application 🙂 Have fun!
       - [Request](#request-16)
       - [Response](#response-16)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 
 # Project walk-though
 
@@ -127,7 +125,7 @@ every component:
 1. `.gitignore` - a file defining the files and components to not be tracked by the 
    version control tool.
 1. `.env` - environment configuration. You won't see the file in the project, but you need to 
-   generate it for the successful run of the application. Look at the "Environment configuration" 
+   generate it for the successful run of the application. Look at the [Environment configuration](#environment-configuration) 
    section for more information.
 1. `utils` - a package containing functions and decorators to help the rest of the project:
     1. `decorators.py` - here you'll find the decorators that validate the application 
