@@ -1,13 +1,11 @@
+import random
 import string
-
-from db import db
 from random import randint
 
 import factory
-import random
-import string
 
-from models import UserModel, ResourceModel, ResourceStatus, TagModel, UserRole
+from db import db
+from models import UserModel, ResourceModel, ResourceStatus, UserRole
 
 
 class BaseFactory(factory.Factory):

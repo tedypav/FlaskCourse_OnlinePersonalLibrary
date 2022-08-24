@@ -1,12 +1,7 @@
-import os
-from unittest.mock import patch
-
 from flask_testing import TestCase
 
-import constants
-from db import db
 from config import create_app
-from managers.user import UserManager
+from db import db
 from models import UserModel
 from schemas.response.user import UserSchemaResponse
 from tests.base import generate_token
@@ -66,7 +61,7 @@ class TestUser(TestCase):
         headers = {
             "Content-Type": "application/json",
         }
-        data = {"email": "unregistered@email.com", "password": "somepass"}
+        data = {"email": "unregistered@email.com", "password": "Somepass1@"}
         resp = self.client.post(url, headers=headers, json=data)
         self.assert400(resp)
 
@@ -80,7 +75,7 @@ class TestUser(TestCase):
         headers = {
             "Content-Type": "application/json",
         }
-        data = {"email": "invalidemail", "password": "somepass"}
+        data = {"email": "invalidemail", "password": "Somepass1@"}
         resp = self.client.post(url, headers=headers, json=data)
         self.assert400(resp)
 
@@ -94,7 +89,7 @@ class TestUser(TestCase):
         headers = {
             "Content-Type": "application/json",
         }
-        data = {"email": user.email, "password": "somepass"}
+        data = {"email": user.email, "password": "Somepass1@"}
         resp = self.client.post(url, headers=headers, json=data)
         self.assert400(resp)
 

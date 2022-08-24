@@ -1,16 +1,11 @@
-import io
-import os
-from unittest.mock import patch
-from werkzeug.datastructures import FileStorage
+from flask_testing import TestCase
 
 from flask_testing import TestCase
 
-import constants
-from db import db
 from config import create_app
+from db import db
 from managers.resource import ResourceManager
-from managers.user import UserManager
-from models import UserModel, ResourceModel
+from models import ResourceModel
 from tests.base import generate_token
 from tests.factories import UserFactory, ResourceFactory
 

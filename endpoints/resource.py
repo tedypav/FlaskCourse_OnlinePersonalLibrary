@@ -8,7 +8,6 @@ from managers.tag import TagManager
 from schemas.request.resource import (
     ResourceSchemaRequest,
     UpdateResourceSchemaRequest,
-    UploadFileResourceSchemaRequest,
 )
 from schemas.request.tag import TagSchemaRequest
 from schemas.response.resource import ResourceSchemaResponse, FullResourceSchemaResponse
@@ -159,7 +158,7 @@ class UploadFileResource(Resource):
             ResourceManager.update_resource(resource_id, data)
             return {
                 "message": f"You successfully uploaded the file in the following location: {url}"
-            }, status.HTTP_200_OK
+            }, status.HTTP_201_CREATED
 
         except:
             return {

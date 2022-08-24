@@ -4,6 +4,7 @@ from marshmallow_enum import EnumField
 from models.enums import ResourceStatus
 from schemas.base import BaseResourceSchema
 from schemas.response.tag import TagShortSchemaResponse
+from utils.general_validators import validate_tag_length
 
 
 class ResourceSchemaResponse(BaseResourceSchema):
@@ -12,14 +13,13 @@ class ResourceSchemaResponse(BaseResourceSchema):
     status = EnumField(ResourceStatus, by_value=True)
 
 
-class FullResourceSchemaResponse(BaseResourceSchema):
-    resource_id = fields.Int(required=True)
-    status = EnumField(ResourceStatus, by_value=True)
-    link = fields.Str(required=True)
+class FullResourceSchemaResponse(ResourceSchemaResponse):
+    link = fields.Str(required=True, validate=validate.Length(min=3, max=300))
     notes = fields.Str(required=True)
     rating = fields.Float(required=True, validate=validate.Range(min=0, max=5))
-    created_datetime = fields.DateTime(required=True)
     updated_datetime = fields.DateTime(required=True)
     owner_id = fields.Int(required=True)
-    tags = fields.Nested(TagShortSchemaResponse, many=True)
-    file_url = fields.Str(required=True)
+    tags = fields.Nested(
+        TagShortSchemaResponse, many=True, validate=validate_tag_length
+    )
+    file_url = fields.Str(required=True, validate=validate.Length(min=3, max=300))

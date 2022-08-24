@@ -2,7 +2,6 @@ from flask_testing import TestCase
 
 from config import create_app
 from db import db
-from models import ResourceModel
 
 AUTHORISED_ENDPOINTS_DATA = (
     ("POST", "/new_resource/"),

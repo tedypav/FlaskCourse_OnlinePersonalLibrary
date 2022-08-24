@@ -1,10 +1,11 @@
-from marshmallow import fields, Schema
+from marshmallow import fields
+
+from schemas.base import BaseTagSchema
 
 
-class TagSchemaResponse(Schema):
-    tag = fields.Str(required=True)
+class TagShortSchemaResponse(BaseTagSchema):
+    pass
+
+
+class TagSchemaResponse(BaseTagSchema):
     tag_id = fields.Int(required=True)
-
-
-class TagShortSchemaResponse(Schema):
-    tag = fields.Str(required=True)

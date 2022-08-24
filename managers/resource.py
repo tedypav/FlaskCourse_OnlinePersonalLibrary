@@ -1,17 +1,15 @@
 import os
 import uuid
 
-from werkzeug.utils import secure_filename
-
-from constants import TEMP_FILE_FOLDER
-from services.aws_s3_bucket import S3Service
 from sqlalchemy import func
 from werkzeug.exceptions import BadRequest, Forbidden
 
+from constants import TEMP_FILE_FOLDER
 from db import db
 from models import ResourceStatus
 from models.resource import ResourceModel, resource_tag
 from schemas.response.resource import FullResourceSchemaResponse
+from services.aws_s3_bucket import S3Service
 from utils.helpers import delete_local_file
 
 s3 = S3Service()
@@ -23,7 +21,7 @@ class ResourceManager:
         resource_data["owner_id"] = owner.user_id
         data = ResourceModel(**resource_data)
         db.session.add(data)
-        db.session.flush()
+        db.session.commit()
         return data
 
     @staticmethod
