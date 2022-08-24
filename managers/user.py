@@ -18,7 +18,6 @@ class UserManager:
         :return: token: string, if everything is okay; otherwise returns BadRequest
         """
         if UserModel.query.filter(UserModel.email == user_data["email"]).count() == 0:
-
             # Hash the password, so we don't save it in raw format in the database
             user_data["password"] = generate_password_hash(
                 user_data["password"], method="sha256"

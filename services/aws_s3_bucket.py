@@ -8,6 +8,7 @@ class S3Service:
     """
     A class that will take care of the AWS S3 Bucket integration
     """
+
     def __init__(self):
         key = config("AWS_ACCESS_KEY_ID")
         secret = config("AWS_SECRET_KEY")

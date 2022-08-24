@@ -11,6 +11,7 @@ class TestTag(TestCase):
     """
     A class to test tag operations.
     """
+
     def create_app(self):
         return create_app("config.TestingConfig")
 

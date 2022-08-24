@@ -12,6 +12,7 @@ class TestUser(TestCase):
     """
     A class to test user operations.
     """
+
     def create_app(self):
         return create_app("config.TestingConfig")
 

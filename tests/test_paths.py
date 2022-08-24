@@ -9,6 +9,7 @@ class TestPaths(TestCase):
     """
     A class with a bit more complicated tests.
     """
+
     def create_app(self):
         return create_app("config.TestingConfig")
 

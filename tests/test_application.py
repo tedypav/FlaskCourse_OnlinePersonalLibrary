@@ -33,6 +33,7 @@ class TestApp(TestCase):
     """
     Some basic tests validating that everything is okay with the user authentication.
     """
+
     def create_app(self):
         return create_app("config.TestingConfig")
 

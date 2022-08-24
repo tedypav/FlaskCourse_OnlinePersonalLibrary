@@ -5,13 +5,14 @@ from random import randint
 import factory
 
 from db import db
-from models import UserModel, ResourceModel, ResourceStatus, UserRole
+from models import UserModel, ResourceModel, ResourceStatus, UserRole, TagModel
 
 
 class BaseFactory(factory.Factory):
     """
     A basic factory object that will be used for the other factories. It will be written in the database after creation.
     """
+
     @classmethod
     def create(cls, **kwargs):
         object = super().create(**kwargs)
@@ -51,7 +52,7 @@ class ResourceFactory(BaseFactory):
     title = "".join(random.choice(string.ascii_lowercase) for i in range(120))
     author = "".join(random.choice(string.ascii_lowercase) for i in range(120))
     link = "".join(random.choice(string.ascii_lowercase) for i in range(120))
-    notes = "".join(random.choice(string.ascii_lowercase) for i in range(120))
+    notes = factory.Faker("text")
     rating = str(randint(1, 5))
     owner_id = factory.SubFactory(UserFactory)
     status = ResourceStatus.pending
@@ -63,8 +64,8 @@ class TagFactory(BaseFactory):
     """
 
     class Meta:
-        model = ResourceModel
+        model = TagModel
 
     tag_id = factory.Sequence(lambda n: n)
-    tag = "".join(random.choice(string.ascii_lowercase) for i in range(50))
+    tag = factory.Faker("word")
     owner_id = factory.SubFactory(UserFactory)

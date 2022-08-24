@@ -53,6 +53,11 @@ class ListResourceResource(Resource):
     def get(self):
         owner = auth.current_user()
         resources = ResourceManager.get_resources(owner)
+
+        if len(resources) == 0:
+            return {
+                "message": "You still haven't registered any resources \N{slightly smiling face}"
+            }, status.HTTP_200_OK
         return {
             "message": "Below is a list of all resources you have previously registered \N{slightly smiling face}",
             "resources": FullResourceSchemaResponse().dump(resources, many=True),
