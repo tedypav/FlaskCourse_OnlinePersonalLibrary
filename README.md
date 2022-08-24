@@ -19,6 +19,71 @@ Below you will get more information on how to use the application 🙂 Have fun!
 
 ## Table of contents
 
+- [Online Library](#online-library)
+- [Project walk-though](#project-walk-though)
+  * [Install](#install)
+  * [Run the app](#run-the-app)
+  * [Run the tests](#run-the-tests)
+  * [Project structure](#project-structure)
+  * [Environment configuration](#environment-configuration)
+  * [Future project development](#future-project-development)
+- [REST API](#rest-api)
+  * [General statistics](#general-statistics)
+  * [User requests](#user-requests)
+    + [Register to the library](#register-to-the-library)
+      - [Request](#request)
+      - [Response](#response)
+    + [Login](#login)
+      - [Request](#request-1)
+      - [Response](#response-1)
+    + [Get your user information](#get-your-user-information)
+      - [Request](#request-2)
+      - [Response](#response-2)
+    + [Update your user information](#update-your-user-information)
+      - [Request](#request-3)
+      - [Response](#response-3)
+  * [Resource requests](#resource-requests)
+    + [Register a new resource](#register-a-new-resource)
+      - [Request](#request-4)
+      - [Response](#response-4)
+    + [Upload resource file](#upload-resource-file)
+      - [Request](#request-5)
+      - [Response](#response-5)
+    + [Tag a resource](#tag-a-resource)
+      - [Request](#request-6)
+      - [Response](#response-6)
+    + [Get all your resources](#get-all-your-resources)
+      - [Request](#request-7)
+      - [Response](#response-7)
+    + [Get resources by tag](#get-resources-by-tag)
+      - [Request](#request-8)
+      - [Response](#response-8)
+    + [Update a resource](#update-a-resource)
+      - [Request](#request-9)
+      - [Response](#response-9)
+    + [Change resource status](#change-resource-status)
+      - [Request](#request-10)
+      - [Response](#response-10)
+      - [Request](#request-11)
+      - [Response](#response-11)
+      - [Request](#request-12)
+      - [Response](#response-12)
+    + [Delete a resource](#delete-a-resource)
+      - [Request](#request-13)
+      - [Response](#response-13)
+    + [Delete a resource file](#delete-a-resource-file)
+      - [Request](#request-14)
+      - [Response](#response-14)
+  * [Tag requests](#tag-requests)
+    + [Get all your tags](#get-all-your-tags)
+      - [Request](#request-15)
+      - [Response](#response-15)
+    + [Delete a tag](#delete-a-tag)
+      - [Request](#request-16)
+      - [Response](#response-16)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 # Project walk-though
 
@@ -69,7 +134,45 @@ every component:
        input and output schemas, along with the check if the user has the required 
        permissions to perform an action (at the time of writing this documentation, 
        this decorator is yet to be used after the introduction of roles in the application).
-   1.
+    1. `general_validators.py` - here you'll find the custom-made functions validating the password, 
+    phone number and tag length.
+   1. `helpers.py` - a script with a helper function used to delete files from the temp folder, 
+    whenever they are uploaded in the AWS S3 Bucket.
+1. `tests` - a package with all tests the application needs to pass:
+    1. `base.py` - includes some functions necessary for the testing and mocking.
+    1. `factories.py` - a script with factories for user, resource and tag. The "products" of 
+    the factories are used in the tests.
+    1. `test_application.py` - contains a number of tests ensuring the protected endpoints' security.
+    1. `test_paths.py` - contains long integration tests with potential user journeys.
+    1. `test_reesource.py` - contains various tests working with the resource endpoints.
+    1. `test_tag.py` - contains various tests working with the tag endpoints.
+    1. `test_user.py` - contains various tests working with the authentication and user endpoints.
+1. `temp_files` - a folder where the uploaded files are saved temporarily before they are moved to 
+AWS S3 Bucket.
+1. `services` - a package with configurations for the integration of third party services.
+    1. `aws_s3_bucket.py` - a script creating the S3 client and defining the upload file and delete 
+    file features of the application.
+1. `schemas` - a package containing all schemas used for input and output validation. The schemas 
+are divided into two groups - request and response.
+    1. `request` - a sub-folder containing all requests schemas. That is, the input through the 
+    endpoints is validated through these schemas.
+    1. `response` - a sub-folder containing all response schemas. That is, the output from the 
+    endpoints is validated through these schemas.
+    1. `base.py` - a script with all base schemas that could be used in both the requests and the 
+    response inheritors schemas.
+1. `models` - a package containing scripts with models of the tables that need to be created in 
+the database.
+    1. `enums.py` - contains all objects of type "Enum".
+    1. `resource.py` - contains the resource model and the resource-tag table object.
+    1. `tag.py` - contaings the tag model.
+    1. `user.py` - contains the user model.
+1. `migrations` - a self-generated and supported folder created upon the usage of the 
+   `flask_migrate` library. Inside you'll find all versions and changes on the database.
+1. `managers` - one of the most important packages, as it contains tha managers defined for all 
+the objects we work with in the library. The managers are classes with definitions of the 
+   functionalities that the objects offer.
+1. `endpoints` - a package defining the routes of the endpoints, which also creates said endpoints 
+and assigns them the functionalities defined through the managers.
 
 ## Environment configuration
 
