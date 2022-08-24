@@ -4,6 +4,9 @@ from db import db
 
 
 class TagModel(db.Model):
+    """
+    A model for the creation of the tag table.
+    """
     __tablename__ = "tag"
 
     tag_id = db.Column(db.Integer, primary_key=True)

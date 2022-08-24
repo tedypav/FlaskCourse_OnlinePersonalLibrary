@@ -84,7 +84,7 @@ class ResourceManager:
         try:
             resource = ResourceManager.get_single_resource(resource_id)
             assignments = ResourceManager.find_assignments(resource_id)
-            assignments.delete(synchronize_session=False)
+            assignments.delete(synchronize_session=True)
             db.session.delete(resource)
             db.session.commit()
         except Exception as ex:

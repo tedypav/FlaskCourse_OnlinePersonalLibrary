@@ -5,6 +5,13 @@ from werkzeug.exceptions import BadRequest
 
 
 def validate_password(password):
+    """
+    Validates that the password meets the requirements for min/max length, types of symbols (lowercase and uppercase
+    letter), at least one digit, at least one special symbol (it also defines special symbols).
+
+    :param password: string; password, provided by the user
+    :return Nothing, if the password is valid; BadRequest, if the password is invalid
+    """
     special_symbols = [
         "$",
         "@",
@@ -47,6 +54,13 @@ def validate_password(password):
 
 
 def validate_phone_number(phone_number):
+    """
+    Validate that the provided phone number is valid.
+
+    :param phone_number: string; the phone number, provided by the user
+    :return Nothing, if the phone number is valid; BadRequest, if the phone number is invalid
+
+    """
     if "phone" in request.get_json():
         phone = request.get_json()["phone"]
         try:
@@ -61,8 +75,19 @@ def validate_phone_number(phone_number):
 
 
 def validate_tag_length(tags):
+    """
+    Ensures that a tags are provided.
+    Ensures that each tag is in the requested length.
+
+    :param tags: list of tags (strings)
+    :return Nothing, if every tag of the list is of the requested length; BadRequest, if the length of any of the tags doesn't meet the requirements
+    """
+
+    # Check that any tags were provided
     if len(tags) == 0:
         raise BadRequest(f"You haven't provided any tags \N{slightly smiling face}")
+
+    # Check each tag's length
     for tag in tags:
         if len(tag) > 50:
             raise BadRequest(

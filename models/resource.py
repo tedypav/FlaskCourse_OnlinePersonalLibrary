@@ -3,6 +3,8 @@ from sqlalchemy import func, UniqueConstraint
 from db import db
 from models.enums import ResourceStatus
 
+
+# Create the many-to-many relationship table for the resources and their assigned tags
 resource_tag = db.Table(
     "resource_tag",
     db.Model.metadata,
@@ -16,6 +18,10 @@ resource_tag = db.Table(
 
 
 class ResourceModel(db.Model):
+    """
+    A model for the creation of the resource table.
+    """
+
     __tablename__ = "resource"
 
     resource_id = db.Column(db.Integer, primary_key=True)

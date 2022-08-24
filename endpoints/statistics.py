@@ -5,6 +5,10 @@ from managers.statistics import StatisticsManager
 
 
 class GeneralStatsResource(Resource):
+    """
+    Any person with access to the application can simply check general statistics from the database.
+    """
+
     def get(self):
         user_stats = StatisticsManager.get_users_stats()
         resource_stats = StatisticsManager.get_resources_stats()

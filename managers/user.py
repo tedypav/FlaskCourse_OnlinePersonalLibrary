@@ -45,6 +45,12 @@ class UserManager:
 
     @staticmethod
     def update_user(user_id, data):
+        """
+        Update the user with provided data.
+        :param user_id: int, the ID of the user
+        :param data: dict, a dictionary of characteristics to be changed and their new values
+        :return: 
+        """
         for key, value in data.items():
             resource = UserModel.query.filter_by(user_id=user_id).update({key: value})
 
