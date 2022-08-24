@@ -61,7 +61,7 @@ class TestUser(TestCase):
         headers = {
             "Content-Type": "application/json",
         }
-        data = {"email": "unregistered@email.com", "password": "somepass"}
+        data = {"email": "unregistered@email.com", "password": "Somepass1@"}
         resp = self.client.post(url, headers=headers, json=data)
         self.assert400(resp)
 
@@ -75,7 +75,7 @@ class TestUser(TestCase):
         headers = {
             "Content-Type": "application/json",
         }
-        data = {"email": "invalidemail", "password": "somepass"}
+        data = {"email": "invalidemail", "password": "Somepass1@"}
         resp = self.client.post(url, headers=headers, json=data)
         self.assert400(resp)
 
@@ -89,7 +89,7 @@ class TestUser(TestCase):
         headers = {
             "Content-Type": "application/json",
         }
-        data = {"email": user.email, "password": "somepass"}
+        data = {"email": user.email, "password": "Somepass1@"}
         resp = self.client.post(url, headers=headers, json=data)
         self.assert400(resp)
 

@@ -21,7 +21,7 @@ class ResourceManager:
         resource_data["owner_id"] = owner.user_id
         data = ResourceModel(**resource_data)
         db.session.add(data)
-        db.session.flush()
+        db.session.commit()
         return data
 
     @staticmethod

@@ -48,7 +48,61 @@ and run the command:
 
 ## Project structure
 
-The project consists of a few Python packages and 
+The project consists of a few Python packages and stand-alone files. Here is a quick summary of 
+every component:
+
+1. `requirements.txt` - a file with all required libraries to run the project.
+1. `Project_Diagrams.drawio` - a visual representation of the database tables that will 
+   be created when the project starts. 
+1. `main.py` - the control file to run in order to start the application.
+1. `db.py` - creating an SQLAlchemy object to connect and write to the database.
+1. `constants.py` - a file with root path and temporary file path constants.
+1. `config.py` - a file with configuration of the testing and dev/prod environment. 
+   This is where the app is created and configured.
+1. `.gitignore` - a file defining the files and components to not be tracked by the 
+   version control tool.
+1. `.env` - environment configuration. You won't see the file in the project, but you need to 
+   generate it for the successful run of the application. Look at the "Environment configuration" 
+   section for more information.
+1. `utils` - a package containing functions and decorators to help the rest of the project:
+    1. `decorators.py` - here you'll find the decorators that validate the application 
+       input and output schemas, along with the check if the user has the required 
+       permissions to perform an action (at the time of writing this documentation, 
+       this decorator is yet to be used after the introduction of roles in the application).
+   1.
+
+## Environment configuration
+
+To successfully run the project, you'll also need a configuration file named ".env". The 
+used parameters are the following:
+
+DB_USER = your PostgreSQL user
+DB_PASSWORD = your server password
+DB_NAME = database name
+DB_PORT = PostgreSQL port
+
+JWT_SECRET = a long random string to use in the token encoding/decoding
+
+ENVIRONMENT = environment (production/development)
+ENVIRONMENT_DEBUG = True/False
+ENVIRONMENT_TESTING = True/False
+
+TEST_ENVIRONMENT = test environment name
+TEST_ENVIRONMENT_DEBUG = True
+TEST_ENVIRONMENT_TESTING = True
+TEST_DB_NAME = name of testing database
+
+
+TOKEN_VALIDITY_VALUE_IN_MINUTES = a variable to help us easily change the time validity of the 
+produced tokens; the time is measured in minutes
+
+PASSWORD_MIN_LENGTH = minimum password length requirement
+PASSWORD_MAX_LENGTH = maximum password length requirement
+
+AWS_ACCESS_KEY_ID = AWS access key ID (provided when generating an access key ID)
+AWS_SECRET_KEY = AWS secret key (provided when generating an access key ID)
+AWS_S3_BUCKET_NAME = name of AWS S3 bucket
+AWS_S3_BUCKET_REGION = region of the registered AWS S3 bucket
 
 ## Future project development
 
@@ -65,6 +119,7 @@ There are still many things that need to be added to the library. Here's a list:
 1. Feature: Being able to replicate other people's resources (those that are shared with you).
 1. Feature: Being able to change your password and registered e-mail.
 1. Add endpoints for bulk registering of resources, tagging, update and delete.
+1. Normalize tag input (make all tags lowercase, etc.).
 
 # REST API
 
