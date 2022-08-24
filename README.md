@@ -178,19 +178,27 @@ To successfully run the project, you'll also need a configuration file named ".e
 used parameters are the following:
 
 DB_USER = your PostgreSQL user
+
 DB_PASSWORD = your server password
+
 DB_NAME = database name
+
 DB_PORT = PostgreSQL port
 
 JWT_SECRET = a long random string to use in the token encoding/decoding
 
 ENVIRONMENT = environment (production/development)
+
 ENVIRONMENT_DEBUG = True/False
+
 ENVIRONMENT_TESTING = True/False
 
 TEST_ENVIRONMENT = test environment name
+
 TEST_ENVIRONMENT_DEBUG = True
+
 TEST_ENVIRONMENT_TESTING = True
+
 TEST_DB_NAME = name of testing database
 
 
@@ -198,11 +206,15 @@ TOKEN_VALIDITY_VALUE_IN_MINUTES = a variable to help us easily change the time v
 produced tokens; the time is measured in minutes
 
 PASSWORD_MIN_LENGTH = minimum password length requirement
+
 PASSWORD_MAX_LENGTH = maximum password length requirement
 
 AWS_ACCESS_KEY_ID = AWS access key ID (provided when generating an access key ID)
+
 AWS_SECRET_KEY = AWS secret key (provided when generating an access key ID)
+
 AWS_S3_BUCKET_NAME = name of AWS S3 bucket
+
 AWS_S3_BUCKET_REGION = region of the registered AWS S3 bucket
 
 ## Future project development
