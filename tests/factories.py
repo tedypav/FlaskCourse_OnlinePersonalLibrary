@@ -9,6 +9,9 @@ from models import UserModel, ResourceModel, ResourceStatus, UserRole
 
 
 class BaseFactory(factory.Factory):
+    """
+    A basic factory object that will be used for the other factories. It will be written in the database after creation.
+    """
     @classmethod
     def create(cls, **kwargs):
         object = super().create(**kwargs)
@@ -18,6 +21,10 @@ class BaseFactory(factory.Factory):
 
 
 class UserFactory(BaseFactory):
+    """
+    A factory to create valid users to be used in the tests.
+    """
+
     class Meta:
         model = UserModel
 
@@ -33,6 +40,10 @@ class UserFactory(BaseFactory):
 
 
 class ResourceFactory(BaseFactory):
+    """
+    A factory to create valid resources to be used in the tests.
+    """
+
     class Meta:
         model = ResourceModel
 
@@ -47,6 +58,10 @@ class ResourceFactory(BaseFactory):
 
 
 class TagFactory(BaseFactory):
+    """
+    A factory to create valid tags to be used in the tests.
+    """
+
     class Meta:
         model = ResourceModel
 

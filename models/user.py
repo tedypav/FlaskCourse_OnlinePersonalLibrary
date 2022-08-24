@@ -8,6 +8,7 @@ class UserModel(db.Model):
     """
     A model for the creation of the user table.
     """
+
     __tablename__ = "user"
 
     user_id = db.Column(db.Integer, primary_key=True)

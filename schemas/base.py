@@ -5,6 +5,9 @@ from utils.general_validators import validate_password
 
 
 class AuthBase(Schema):
+    """
+    A basic schema used for the user authentication.
+    """
     email = fields.Email(required=True)
     password = fields.Str(
         required=True,

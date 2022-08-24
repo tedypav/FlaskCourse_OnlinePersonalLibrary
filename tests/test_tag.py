@@ -8,6 +8,9 @@ from tests.factories import UserFactory, ResourceFactory
 
 
 class TestTag(TestCase):
+    """
+    A class to test tag operations.
+    """
     def create_app(self):
         return create_app("config.TestingConfig")
 
@@ -20,6 +23,9 @@ class TestTag(TestCase):
         db.drop_all()
 
     def test_get_all_tags(self):
+        """
+        Test that the user will get all tags they used previously, but none of other users' tags.
+        """
         tested_url = "/my_tags/"
 
         user1 = UserFactory()
@@ -84,7 +90,10 @@ class TestTag(TestCase):
             assert tag["tag"] in set(data2["tag"])
 
     def test_delete_tags(self):
-
+        """
+        Make sure that the users are able to delete their own tags, but not any other users's.
+        Make sure all assignments to the deleted tags are deleted, too.
+        """
         user1 = UserFactory()
         user2 = UserFactory()
         new_resource1 = ResourceFactory(owner_id=user1.user_id)

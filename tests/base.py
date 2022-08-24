@@ -2,6 +2,12 @@ from managers.auth import AuthManager
 
 
 def generate_token(user):
+    """
+    Create a token.
+
+    :param user: UserModel object
+    :return: token: string, a valid token
+    """
     return AuthManager.encode_token(user)
 
 

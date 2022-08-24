@@ -10,7 +10,10 @@ from tests.base import generate_token
 from tests.factories import UserFactory, ResourceFactory
 
 
-class TestResourceRegister(TestCase):
+class TestResource(TestCase):
+    """
+    A class to test all kind of operations with the resources.
+    """
     def create_app(self):
         return create_app("config.TestingConfig")
 
@@ -23,6 +26,9 @@ class TestResourceRegister(TestCase):
         db.drop_all()
 
     def test_register_resource_schema_missing_fields_raises(self):
+        """
+        Make sure that you can't register a resource, if the user hasn't provided the right information.
+        """
         url = "/new_resource/"
         resources = ResourceModel.query.all()
         assert len(resources) == 0
@@ -46,6 +52,9 @@ class TestResourceRegister(TestCase):
         assert len(users) == 0
 
     def test_update_others_resource(self):
+        """
+        Make sure that a user can't update someone else's resource.
+        """
         url = "/update_resource/"
         user1 = UserFactory()
         token = generate_token(user1)
@@ -92,6 +101,9 @@ class TestResourceRegister(TestCase):
         )
 
     def test_delete_others_resource(self):
+        """
+        Make sure a user can't delete someone else's resource.
+        """
         user1 = UserFactory()
         token = generate_token(user1)
         headers = {
@@ -110,6 +122,9 @@ class TestResourceRegister(TestCase):
         )
 
     def test_get_all_resources(self):
+        """
+        Make sure it returns the right number and resource information when a user requests to see their resources.
+        """
         url = "/my_resources/"
 
         user = UserFactory()
@@ -130,6 +145,9 @@ class TestResourceRegister(TestCase):
         assert len(resp.json["resources"]) == 2
 
     def test_tag_resource(self):
+        """
+        Make sure the tagging works.
+        """
         url = "/tag_resource/"
 
         user = UserFactory()
@@ -175,6 +193,9 @@ class TestResourceRegister(TestCase):
         assert len(resp.json["resource"]["tags"]) == len(set(data["tag"]))
 
     def test_upload_file_invalid_resources(self):
+        """
+        Make sure the user can't upload a file to someone else's resource.
+        """
         user = UserFactory()
         user2 = UserFactory()
         new_resource2 = ResourceFactory(owner_id=user2.user_id)

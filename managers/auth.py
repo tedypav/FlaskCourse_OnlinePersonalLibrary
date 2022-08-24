@@ -11,7 +11,7 @@ from models import UserModel
 
 class AuthManager:
     """
-    A class responsible for the authentication to the library.
+    A class responsible for the token authentication to the library.
     """
 
     @staticmethod
