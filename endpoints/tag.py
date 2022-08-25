@@ -7,6 +7,13 @@ from schemas.response.tag import TagSchemaResponse
 
 
 class ListTagsResource(Resource):
+    """
+    Lists all tags that the user has previously used. Validates that the user is authenticated. If everything is okay,
+    returns 200 OK and a list of the tags and their IDs.
+
+    Headers: "Authorization": "Bearer <token>"
+    """
+
     @auth.login_required
     def get(self):
         owner = auth.current_user()
@@ -18,6 +25,13 @@ class ListTagsResource(Resource):
 
 
 class DeleteTagNameResource(Resource):
+    """
+    Deletes a tag and assignments related to it. Validates that the user is authenticated, then makes sure that they
+    have previously used this tag. If everything is okay, returns 200 OK.
+
+    Headers: "Authorization": "Bearer <token>"
+    """
+
     @auth.login_required
     def delete(self, tag):
         owner = auth.current_user()

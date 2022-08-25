@@ -9,6 +9,22 @@ from utils.decorators import validate_schema
 
 
 class RegisterResource(Resource):
+    """
+    A resource for initial user registration. Validates that the provided data matches the requested schema, then creates
+    a record in the user table. If everything is okay, returns a happy message, 201 CREATED and a valid token.
+
+    Headers: "Content-Type": "application/json"
+    Body: first_name (mandatory; a string between 1 and 30 characters)
+          last_name (mandatory; a string between 1 and 30 characters)
+          email (mandatory; a valid e-mail address)
+          password (mandatory; needs to have at least 6 characters, at least 1 lowercase letter,
+                     at least 1 capital letter, at least 1 digit, at least 1 special symbol of the
+                     following: ["$", "@", "#", "%", "^", "*", ")", ".", "(", "-", "=", "!", "&", "+"])
+          phone (optional; a valid phone number of the format "+[country code][phone number]")
+          company (optional; a string between 1 and 50 characters)
+          job_position (optional; a string between 1 and 50 characters)
+    """
+
     @validate_schema(RegisterSchemaRequest)
     def post(self):
         data = request.get_json()
@@ -20,6 +36,15 @@ class RegisterResource(Resource):
 
 
 class LoginResource(Resource):
+    """
+    A resource for user login. Validates that the provided data matches the requested schema.
+    If everything is okay, returns a happy message, 200 OK and a valid token.
+
+    Headers: "Content-Type": "application/json"
+    Body: email (mandatory; the e-mail you registered with)
+          password (mandatory; the password you registered with)
+    """
+
     @validate_schema(LoginSchemaRequest)
     def post(self):
         data = request.get_json()

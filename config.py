@@ -9,6 +9,8 @@ from endpoints.routes import routes
 
 
 class EnvironmentConfig:
+    """Configurations for the environment that we're working on."""
+
     FLASK_ENV = config("ENVIRONMENT")
     DEBUG = config("ENVIRONMENT_DEBUG")
     TESTING = config("ENVIRONMENT_TESTING")
@@ -30,6 +32,11 @@ class TestingConfig:
 
 
 def create_app(config="config.EnvironmentConfig"):
+    """ "
+    Creates the FLASK application
+    :param config: class, configuration information from the configuration classes
+    :return The application
+    """
     app = Flask(__name__)
     app.config.from_object(config)
 

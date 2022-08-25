@@ -30,6 +30,10 @@ NO_INPUT_ENDPOINTS_DATA = (("GET", "/general_stats/"),)
 
 
 class TestApp(TestCase):
+    """
+    Some basic tests validating that everything is okay with the user authentication.
+    """
+
     def create_app(self):
         return create_app("config.TestingConfig")
 
@@ -49,6 +53,9 @@ class TestApp(TestCase):
         headers=None,
         payload=None,
     ):
+        """
+        A simple function to iterate across endpoints. Makes it easier to test stuff.
+        """
         if not headers:
             headers = {}
         if not payload:
@@ -69,6 +76,9 @@ class TestApp(TestCase):
                 self.assertEqual(resp.json, expected_resp_body)
 
     def test_protected_endpoints(self):
+        """
+        Go through all endpoints that require authentication and make sure you can't get any information without a token.
+        """
         self.iterate_endpoints(
             AUTHORISED_ENDPOINTS_DATA,
             self.assert_401,
@@ -78,12 +88,22 @@ class TestApp(TestCase):
         )
 
     def test_unprotected_endpoints(self):
+        """
+        Go through all endpoints that don't require a token, but require input, and make sure you don't get anything
+        without providing the right input.
+        """
         self.iterate_endpoints(UNAUTHORISED_ENDPOINTS_DATA, self.assert_400, "")
 
     def test_no_input_endpoints(self):
+        """
+        Go through all unprotected endpoints that don't need input and make sure you get a response 200 OK.
+        """
         self.iterate_endpoints(NO_INPUT_ENDPOINTS_DATA, self.assert_200, "")
 
     def test_expired_token_raises(self):
+        """
+        Go though all protected endpoints and make sure you get the right error when you use an expired token.
+        """
         headers = {
             "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjM2LCJleHAiOjE2NjA4OTE1MTZ9.pbx2hPf9hi7JhHkRPsHeQIrcDKsZn9n80jNCVaPo3IA"
         }
@@ -95,6 +115,9 @@ class TestApp(TestCase):
         )
 
     def test_invalid_token_raises(self):
+        """
+        Go though all protected endpoints and make sure you get the right error when you use an invalid token.
+        """
         headers = {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGcin9n80jNCVaPo3IA"}
         self.iterate_endpoints(
             AUTHORISED_ENDPOINTS_DATA,

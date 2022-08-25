@@ -9,6 +9,10 @@ from tests.factories import UserFactory
 
 
 class TestUser(TestCase):
+    """
+    A class to test user operations.
+    """
+
     def create_app(self):
         return create_app("config.TestingConfig")
 
@@ -21,6 +25,9 @@ class TestUser(TestCase):
         db.drop_all()
 
     def test_register_user_schema_missing_fields_raises(self):
+        """
+        Make sure that a user can't register if they don't provide all necessary information.
+        """
         url = "/register/"
         users = UserModel.query.all()
         assert len(users) == 0
@@ -43,6 +50,9 @@ class TestUser(TestCase):
         assert len(users) == 0
 
     def test_login_no_credentials(self):
+        """
+        Make sure a user can't login, if they haven't provided any credentials.
+        """
         url = "/login/"
         headers = {
             "Content-Type": "application/json",
@@ -57,6 +67,9 @@ class TestUser(TestCase):
         }
 
     def test_login_unregistered_email(self):
+        """
+        Make sure a user can't login, if they provide an unregistered e-mail.
+        """
         url = "/login/"
         headers = {
             "Content-Type": "application/json",
@@ -71,6 +84,9 @@ class TestUser(TestCase):
         )
 
     def test_login_invalid_email(self):
+        """
+        Make sure the users can't login if they provide an invalid e-mail address.
+        """
         url = "/login/"
         headers = {
             "Content-Type": "application/json",
@@ -82,6 +98,9 @@ class TestUser(TestCase):
         assert resp.json["message"] == {"email": ["Not a valid email address."]}
 
     def test_login_incorrect_pass(self):
+        """
+        Make sure that users can't login if they provide an incorrect password.
+        """
         url = "/login/"
 
         user = UserFactory()
@@ -99,6 +118,10 @@ class TestUser(TestCase):
         )
 
     def test_get_own_user_info(self):
+        """
+        Make sure that the users will only get their own information when requested.
+        Make sure they get the right data.
+        """
         url = "/my_user/"
 
         user = UserFactory()
@@ -112,6 +135,9 @@ class TestUser(TestCase):
         assert resp.json["user"]["user_id"] == user.user_id
 
     def test_update_own_info(self):
+        """
+        Make sure the users can only update their own information, and that the update works.
+        """
         url = "/update_user/"
 
         user = UserFactory()
@@ -139,6 +165,9 @@ class TestUser(TestCase):
         assert new_user_info["job_position"] == data["job_position"]
 
     def test_update_without_info(self):
+        """
+        Make sure the users can't update their profile without providing correct information.
+        """
         url = "/update_user/"
 
         user = UserFactory()

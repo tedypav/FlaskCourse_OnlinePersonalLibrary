@@ -10,6 +10,13 @@ from utils.decorators import validate_schema
 
 
 class GetUserInfoResource(Resource):
+    """
+    Provides the profile information of the user-requester. It validates that the user is registered and if the token is
+    valid, returns the user data.
+
+    Headers: "Authorization": "Bearer <token>"
+    """
+
     @auth.login_required
     def get(self):
         owner = auth.current_user()
@@ -21,6 +28,20 @@ class GetUserInfoResource(Resource):
 
 
 class UpdateUserResource(Resource):
+    """
+    Updates the information of the user-requester. It validates that the provided token is valid, and that the provided
+    data matches the requested format. If everything is okay, we get a happy message and 200 OK. If the provided dictionary
+    is empty, we get a 400 BAD REQUEST.
+
+    Headers: "Authorization": "Bearer <token>"
+             "Content-Type": "application/json"
+    Body: first_name (optional; a string between 1 and 30 characters)
+          last_name (optional; a string between 1 and 30 characters)
+          phone (optional; a valid phone number of the format "+[country code][phone number]")
+          company (optional; a string between 1 and 50 characters)
+          job_position (optional; a string between 1 and 50 characters)
+    """
+
     @auth.login_required
     @validate_schema(UpdateUserSchemaRequest)
     def put(self):

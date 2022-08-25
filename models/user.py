@@ -5,6 +5,10 @@ from models.enums import UserRole
 
 
 class UserModel(db.Model):
+    """
+    A model for the creation of the user table.
+    """
+
     __tablename__ = "user"
 
     user_id = db.Column(db.Integer, primary_key=True)
@@ -18,5 +22,3 @@ class UserModel(db.Model):
     created_datetime = db.Column(db.DateTime, server_default=func.now())
     updated_datetime = db.Column(db.DateTime, server_default=func.now())
     user_role = db.Column(db.Enum(UserRole), nullable=False)
-    # tags = db.relationship("TagModel", backref="tag", lazy='dynamic')
-    # resources = db.relationship("ResourceModel", backref="resource", lazy='dynamic')

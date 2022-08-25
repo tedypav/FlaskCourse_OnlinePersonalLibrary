@@ -5,7 +5,11 @@ from db import db
 from models import ResourceModel
 
 
-class TestApp(TestCase):
+class TestPaths(TestCase):
+    """
+    A class with a bit more complicated tests.
+    """
+
     def create_app(self):
         return create_app("config.TestingConfig")
 
@@ -18,6 +22,9 @@ class TestApp(TestCase):
         db.drop_all()
 
     def test_happy_path(self):
+        """
+        Test a happy path - making sure the user's giving correct data and use it subsequently in endpoints.
+        """
 
         # Register a new user
         headers = {
@@ -39,7 +46,6 @@ class TestApp(TestCase):
         token = register_resp.json["token"]
 
         # Get the new user's information
-
         headers = {
             "Authorization": f"Bearer {token}",
         }
@@ -54,7 +60,6 @@ class TestApp(TestCase):
                 assert value == data[key]
 
         # Update the user's information
-
         new_data = {"company": "Test Corporation", "job_position": "QA"}
 
         headers = {
@@ -72,7 +77,6 @@ class TestApp(TestCase):
         )
 
         # Check updated data
-
         headers = {
             "Authorization": f"Bearer {token}",
         }
@@ -87,7 +91,6 @@ class TestApp(TestCase):
                 assert value == data[key]
 
         # Register a new source
-
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
@@ -110,7 +113,6 @@ class TestApp(TestCase):
                 assert value == resource_data[key]
 
         # Update the resource
-
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
@@ -133,12 +135,7 @@ class TestApp(TestCase):
             == f"You successfully updated resource with ID = {resource_id}."
         )
 
-        # for key, value in register_resource_resp.json["resource"].items():
-        #     if key in resource_data:
-        #         assert value == resource_data[key]
-
         # Tag a resource
-
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
@@ -167,7 +164,6 @@ class TestApp(TestCase):
         )
 
         # Get all registered resources
-
         headers = {
             "Authorization": f"Bearer {token}",
         }
@@ -188,7 +184,6 @@ class TestApp(TestCase):
         )
 
         # Login
-
         headers = {
             "Content-Type": "application/json",
         }
@@ -209,11 +204,9 @@ class TestApp(TestCase):
         login_token = login_resp.json["token"]
 
         # Get general statistics
-
         stats = self.client.get("/general_stats/")
 
         # Get all tags
-
         headers = {
             "Authorization": f"Bearer {login_token}",
         }
@@ -229,7 +222,6 @@ class TestApp(TestCase):
         assert len(get_tags_resp.json["tags"]) == len(set(tag_data["tag"]))
 
         # Delete the tag "test"
-
         headers = {
             "Authorization": f"Bearer {login_token}",
         }
@@ -243,7 +235,6 @@ class TestApp(TestCase):
         )
 
         # Get all tags again
-
         headers = {
             "Authorization": f"Bearer {login_token}",
         }
@@ -259,7 +250,6 @@ class TestApp(TestCase):
         assert len(get_updated_tags_resp.json["tags"]) == len(set(tag_data["tag"])) - 1
 
         # Get all resources again
-
         headers = {
             "Authorization": f"Bearer {login_token}",
         }

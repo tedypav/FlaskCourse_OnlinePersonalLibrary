@@ -5,6 +5,14 @@ from managers.auth import auth
 
 
 def validate_schema(schema_name):
+    """
+    Validate that the provided data matches the requested schema.
+
+    :param schema_name: schema
+    :return If everything is okay, func(*args, **kwargs): the function that is modified by the decorator
+            If there is an error - BadRequest with a long list of errors
+    """
+
     def decorated_function(func):
         def wrapper(*args, **kwargs):
             data = request.get_json()
@@ -20,6 +28,15 @@ def validate_schema(schema_name):
 
 
 def permission_required(role):
+    """
+    Validate that the user has the necessary role to perform an action.
+
+    :param role: string; the necessary role to perform an action
+    :return If everything is okay, func(*args, **kwargs): the function that is modified by the decorator
+            If there is an error - Forbidden with a sad message about the user's permission level
+
+    """
+
     def decorated_function(func):
         def wrapper(*args, **kwargs):
             current_user = auth.current_user()
