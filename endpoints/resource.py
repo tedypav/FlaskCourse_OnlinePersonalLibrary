@@ -181,7 +181,7 @@ class DeleteResourceResource(Resource):
 
         # Check if there is a file associated with the resource and delete it, if there is
         url = FullResourceSchemaResponse().dump(resource)["file_url"]
-        if url != "":
+        if url is not None:
             file_name = url.split("/")[-1]
             ResourceManager.delete_file(file_name)
 
