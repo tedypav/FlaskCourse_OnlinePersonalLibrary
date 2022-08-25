@@ -8,7 +8,7 @@ from constants import TEMP_FILE_FOLDER
 from db import db
 from models import ResourceStatus
 from models.resource import ResourceModel, resource_tag
-from schemas.response.resource import FullResourceSchemaResponse, ResourceSchemaResponse
+from schemas.response.resource import FullResourceSchemaResponse
 from services.aws_s3_bucket import S3Service
 from utils.helpers import delete_local_file
 
@@ -141,7 +141,6 @@ class ResourceManager:
         # Delete the resource
         db.session.delete(resource)
         db.session.commit()
-
 
     @staticmethod
     def update_resource(resource_id, data):

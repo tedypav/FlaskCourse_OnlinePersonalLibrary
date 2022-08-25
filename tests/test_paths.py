@@ -2,7 +2,7 @@ from flask_testing import TestCase
 
 from config import create_app
 from db import db
-from models import ResourceModel
+from models import ResourceModel, resource_tag
 
 
 class TestPaths(TestCase):
@@ -135,6 +135,55 @@ class TestPaths(TestCase):
             == f"You successfully updated resource with ID = {resource_id}."
         )
 
+        # Change the resource's status
+        ## Dropped
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        resource_id = register_resource_resp.json["resource"]["resource_id"]
+
+        change_resource_status_resp = self.client.put(
+            f"/resource_status/{resource_id}/dropped/", headers=headers
+        )
+
+        assert change_resource_status_resp.status_code == 200
+        assert (
+            change_resource_status_resp.json["message"]
+            == "You successfully changed this resource's status to Dropped"
+        )
+
+        ## To Read
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        resource_id = register_resource_resp.json["resource"]["resource_id"]
+
+        change_resource_status_resp = self.client.put(
+            f"/resource_status/{resource_id}/to_read/", headers=headers
+        )
+
+        assert change_resource_status_resp.status_code == 200
+        assert (
+            change_resource_status_resp.json["message"]
+            == "You successfully changed this resource's status to To Read"
+        )
+
+        ## Read
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        resource_id = register_resource_resp.json["resource"]["resource_id"]
+
+        change_resource_status_resp = self.client.put(
+            f"/resource_status/{resource_id}/read/", headers=headers
+        )
+
+        assert change_resource_status_resp.status_code == 200
+        assert (
+            change_resource_status_resp.json["message"]
+            == "You successfully changed this resource's status to Read"
+        )
+
         # Tag a resource
         headers = {
             "Authorization": f"Bearer {token}",
@@ -265,3 +314,25 @@ class TestPaths(TestCase):
         for resource in get_updated_resources_resp.json["resources"]:
             for tag in resource["tags"]:
                 assert tag["tag"] != "test"
+
+        # Delete a resource
+
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        resource_id = register_resource_resp.json["resource"]["resource_id"]
+
+        delete_resource_resp = self.client.delete(
+            f"/delete_resource/{resource_id}/", headers=headers
+        )
+
+        assert (
+            delete_resource_resp.json["message"]
+            == f"You successfully deleted resource with ID = {resource_id}."
+        )
+        assert get_updated_resources_resp.status_code == 200
+        assert ResourceModel.query.filter_by(resource_id=resource_id).count() == 0
+        assert (
+            db.session.query(resource_tag).filter_by(resource_id=resource_id).count()
+            == 0
+        )

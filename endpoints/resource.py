@@ -216,7 +216,7 @@ class GetResourceByTagResource(Resource):
         assignments = TagManager.find_assignments(
             TagSchemaResponse().dump(tag_info)["tag_id"]
         )
-        if assignments is None:
+        if assignments is None or assignments.count() == 0:
             return {
                 "message": f"You still haven't tagged anything as '{tag}' \N{slightly smiling face}"
             }
