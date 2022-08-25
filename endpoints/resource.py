@@ -287,7 +287,7 @@ class UploadFileResource(Resource):
             current_url = FullResourceSchemaResponse().dump(resource)["file_url"]
 
             # If there is a related file already, delete it forever
-            if current_url is not None:
+            if current_url is not None and current_url != "":
                 file_name = current_url.split("/")[-1]
                 ResourceManager.delete_file(file_name)
 
@@ -326,7 +326,7 @@ class DeleteFileResource(Resource):
         url = FullResourceSchemaResponse().dump(resource)["file_url"]
 
         # If there is no file uploaded for this resource, tell the user that we have figured it out
-        if url == "":
+        if url == "" or url is None:
             return {
                 "message": "Don't try to fool us! There is no file associated with this resource \N{slightly smiling face}"
             }, status.HTTP_400_BAD_REQUEST
