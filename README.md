@@ -111,6 +111,7 @@ The project consists of a few Python packages and stand-alone files. Here is a q
 1. `requirements.txt` - a file with all required libraries to run the project.
 1. `Project_Diagrams.drawio` - a visual representation of the database tables that will be created when the project
    starts.
+1. `Data Catalog.xlsx` - a detailed description of the database objects, the table columns and database structure.
 1. `main.py` - the control file to run in order to start the application.
 1. `db.py` - creating an SQLAlchemy object to connect and write to the database.
 1. `constants.py` - a file with root path and temporary file path constants.
