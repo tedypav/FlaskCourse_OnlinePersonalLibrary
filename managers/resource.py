@@ -135,18 +135,12 @@ class ResourceManager:
         :param resource_id: int, the ID of the resource that will get deleted
         :return: If everything is okay - nothing, otherwise - errors
         """
-        try:
-            resource = ResourceManager.get_single_resource(resource_id)
-            assignments = ResourceManager.find_assignments(resource_id)
 
-            # Delete assignments
-            assignments.delete(synchronize_session=True)
+        resource = ResourceManager.get_single_resource(resource_id)
 
-            # Delete the resource
-            db.session.delete(resource)
-            db.session.commit()
-        except Exception as ex:
-            return ex
+        # Delete the resource
+        db.session.delete(resource)
+        db.session.commit()
 
     @staticmethod
     def update_resource(resource_id, data):
@@ -177,7 +171,7 @@ class ResourceManager:
         """
 
         # Get the file extension
-        extension = file.filename.split(".")[1]
+        extension = file.filename.split(".")[-1]
 
         # Change the file name
         name = f"{str(uuid.uuid4())}.{extension}"

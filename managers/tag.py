@@ -105,8 +105,8 @@ class TagManager:
 
         # Delete assignments to the tag
         assignments = TagManager.find_assignments(tag_id=tag_id)
+        assignments.delete(synchronize_session=False)
 
         # Delete the tag
-        assignments.delete(synchronize_session=False)
         db.session.delete(tag)
         db.session.commit()
